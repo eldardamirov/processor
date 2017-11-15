@@ -27,11 +27,14 @@ enum commands
     {
     hlt, nullCommand,
     in, out,
-    add, sub, mul, myDiv, 
-    mySin, myCos, mySqrt, myAbs,
+    add, sub, mul, myDiv, // 7
+    mySin, myCos, mySqrt, myAbs, // 11
     myDup, dump,
-    popS, popR,
-    pushS, pushR
+    pushR, popR, // 14 - 15
+    pushS, popS,
+    border,
+    pushRAM, popRAM,
+    push, pop // 21 - 22
     };
 
 
@@ -39,11 +42,14 @@ enum commands
 
 const char* haultCommandHuman = "hlt";
 
-const char* pushStackCommandHuman = "pushS";
-const char* pushRegisterCommandHuman = "pushR";
+const char* pushCommandHuman = "push";
+const char* popCommandHuman = "pop";
 
-const char* popStackCommandHuman = "popS";
-const char* popRegisterCommandHuman = "popR";
+//const char* pushRegisterCommandHuman = "pushR";
+//const char* popRegisterCommandHuman = "popR";
+
+//const char* pushStackCommandHuman = "pushS";
+//const char* popStackCommandHuman = "pushR";
 
 const char* inputFromKeyboardCommandHuman = "in";
 const char* outputCommandHuman = "out";

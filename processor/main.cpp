@@ -23,10 +23,7 @@
 class Processor
     {
     public:
-    
-//        template <double> Stack processorStack;
-//        Stack& <double> processorStack;
-        Processor() : processorStack ( Stack <double> ( 64 ) )
+        Processor() : processorStack ( Stack <double> ( 1000, LOW ) )
             {
             
             }
@@ -39,58 +36,40 @@ class Processor
             int currentCommandId = 0;
             std::string argument = "5";
             
-            // printf ( "I was here" );
-            
-//            std::cout << "STATUS:" << machineCode.isEnd() << std::endl;
+            //printf ( "%s", machineCode.getNextString().c_str() );
             
             while ( !machineCode.isEnd() )
                 {
-                printf ( "1\n" );
+//                printf ( "\n1\n" );
+//                std::string temptemp = machineCode.getNextString();
+//                printf ( "%s", machineCode.getNextString() );
+                
                 currentCommandId = std::stoi ( machineCode.getNextString() );
-                printf ( "2\n" );
-                if ( currentCommandId > popS )
+                
+                if ( currentCommandId > border )
                     {
                     argument = machineCode.getNextString();
+//                    printf ( "\n\nAND HERE I WAS, AND WHAT IT WAS: %s\n\n", argument.c_str() );
                     }
-                printf ( "3\n" ); 
+//                printf ( "gg" );
                     
                 if ( doCommand ( currentCommandId, argument ) == -2 )
                     {
                     printf ( "Goodbye" );
-                    break;
+//                    break;
+                    return 0;
                     }
-                printf ( "4\n" );
                 
-                printf ( "HEY: %f", processorStack.top() );
+//                printf ( "HEY: %f", processorStack.top() );
+//                processorStack.printItAll();
                 
                 argument = "";
                 }
                 
-            printf ( "DDI was here" );
+//            printf ( "%f", *processorStack.top() );
             
-            /*
-            while ( !machineCode.isEnd() )
-                {
-//                printf ( "I was here" );
-                currentCommandId = std::stoi ( machineCode.getNextString() );
-                argument= "";
-                
-                if ( currentCommandId > popS ) // popS, because after popS in our enum all commands need arguments;
-                    {
-                    argument = machineCode.getNextString();
-                    }
-                    
-                printf ( "I was here" ); 
-                printf ( "\n\nHEY:%d\n\n", doCommand ( currentCommandId, argument ) );   
-                if ( doCommand ( currentCommandId, argument ) == -2 )
-                    {
-                    break;
-                    printf ( "\n\nHEY:%d\n\n", doCommand ( currentCommandId, argument ) );
-                    }
-                printf ( "I was here" );
-                
-                }
-            */
+            
+
             
             return 0;
             }
@@ -102,15 +81,16 @@ class Processor
         int currentFreeRegisterId = 0;
         
         
+        // REGISTERS
+        double ax = 0.0, bx = 0.0, cx = 0.0, dx = 0.0;
+        double npu1 = 0.0, npu2 = 0.0;
+        double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
+        
         
         int doCommand ( int commandId, std::string argument )
             {
-//            printf ( "I was here" );
-//            double temp = 0;
-        
-//            printf ( "\n III __ %d __ \n", commandId );
-        
-        
+//            printf ( "\nNow I'm doing command with id %d and argument %s\n", commandId, argument.c_str() );
+            
             switch ( commandId )
                 {
                 case hlt:
@@ -119,47 +99,61 @@ class Processor
                     return -1; // some error occured;
                 case out:
                     stackOut();
+                    return 0;
                 case add:
                     stackAdd();
+                    return 0;
                 case sub:
                     stackSub();
+                    return 0;
                 case mul:
                     stackMul();
+                    return 0;
                 case myDiv:
                     stackDiv();
+                    return 0;
                 case mySin:
                     stackSin();
+                    return 0;
                 case myCos:
                     stackCos();
+                    return 0;
                 case mySqrt:
                     stackSqrt();
+                    return 0;
                 case myAbs:
                     stackAbs();
+                    return 0;
                 case myDup:
                     stackDup();
+                    return 0;
                 case dump:
                     stackDump();
-                case popS:
+                    return 0;
+                case pop:
                     stackPopS();
+                    return 0;
                 case popR:
                     stackPopR ();
-                case pushS:
+                    return 0;
+                case push:
                     stackPushS ( argument );
+                    return 0;
                 case pushR:
                     stackPushR ( argument );
+                    return 0;
                 case in:
                     stackIn();
+                    return 0;
                 default:
-                    return -2;
-                    
-                    
-                
+                    return -7;
                 }
+            return 0;
             }
             
         int stackOut()
             {
-            printf ( "%f I was here", processorStack.top() );
+            printf ( "%f", *processorStack.top() );
             processorStack.pop();
             
             return 0;
@@ -169,9 +163,9 @@ class Processor
             {
             double temp = 0;
             
-            temp = temp + processorStack.top();
+            temp = temp + *processorStack.top();
             processorStack.pop();
-            temp = temp + processorStack.top();
+            temp = temp + *processorStack.top();
             processorStack.pop();
             processorStack.push ( temp );
             
@@ -182,9 +176,9 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
-            temp = temp - processorStack.top();
+            temp = temp - *processorStack.top();
             processorStack.pop();
             processorStack.push ( temp );
             
@@ -195,9 +189,9 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
-            temp = temp * processorStack.top();
+            temp = temp * *processorStack.top();
             processorStack.pop();
             processorStack.push ( temp );
             
@@ -208,9 +202,9 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
-            temp = temp / processorStack.top();
+            temp = temp / *processorStack.top();
             processorStack.pop();
             processorStack.push ( temp );
             
@@ -221,7 +215,7 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
             processorStack.push ( sin ( temp ) );
             
@@ -232,7 +226,7 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
             processorStack.push ( cos ( temp ) );
             
@@ -243,7 +237,7 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
             processorStack.push ( sqrt ( temp ) );
             
@@ -254,7 +248,7 @@ class Processor
             {
             double temp = 0;
             
-            temp = processorStack.top();
+            temp = *processorStack.top();
             processorStack.pop();
             processorStack.push ( abs ( temp ) );
             
@@ -263,14 +257,14 @@ class Processor
             
         int stackDup()
             {
-            processorStack.push ( processorStack.top() );
+            processorStack.push ( *processorStack.top() );
             
             return 0;
             }
             
         int stackDump()
             {
-            processorStack.dump();
+//            processorStack.dump();
             
             return 0;
             }
@@ -284,7 +278,7 @@ class Processor
             
         int stackPopR()
             {
-            myRegister [ currentFreeRegisterId ] = processorStack.top();
+            myRegister [ currentFreeRegisterId ] = *processorStack.top();
             processorStack.pop();
             
             return 0;
@@ -292,10 +286,12 @@ class Processor
         
         int stackPushS ( std::string argument )
             {
-            processorStack.push ( std::stod ( argument ) );
+//            printf ( "KK %s KK", argument.c_str() );
+            double temp = std::stod ( argument ); 
+            processorStack.push ( temp );
             
             
-            printf ( "  %f III was here\n", processorStack.top() );
+//            printf ( "  %f III was here\n", *processorStack.top() );
             
             
             return 0;
@@ -319,13 +315,25 @@ class Processor
             }
         
             
-            
-            
-        
+
     
     };
 
 
+int main()
+    {
+    compiler testCompiler ( "humanCode.txt", "machineCode.txt" );
+    Processor tempProcessor;
+    tempProcessor.boss();
+    
+    
+    
+    return 0;
+    }
+
+
+
+/*
 int main ( int argc, const char * argv[] ) 
     {
     compiler myCompiler ( "humanCode.txt", "machineCode.txt" );  
@@ -334,3 +342,52 @@ int main ( int argc, const char * argv[] )
     
     return 0;
     }
+*/    
+
+    
+/*
+    
+int main()
+    {
+    readFromFile action ( "humanCodee.txt" );
+    while ( ! ( action.isEnd() ) )
+        {
+        std::cout << action.getNextString() << std::endl;
+        }
+    
+    return 0;
+    }
+
+*/
+
+/*
+
+int main()
+    {
+    Stack <double> tempStack ( 2, LOW );
+    
+    for ( int i = 0; i < 1999; i++ )
+        {
+        tempStack.push ( 5.488573848 );
+        }
+        
+    tempStack.push ( 6 );
+    tempStack.pop();
+        
+    
+        
+		
+	printf ( "ALL is ok!! %f", *tempStack.top() );
+		
+        
+    
+    
+    return 0;
+    }
+*/
+    
+    
+    
+    
+    
+    

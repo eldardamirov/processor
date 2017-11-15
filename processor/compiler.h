@@ -86,21 +86,13 @@ class compiler
                 {                
                 return hlt;
                 }
-            if ( tempCommand == pushStackCommandHuman )
+            if ( tempCommand == pushCommandHuman )
                 {                
-                return pushS;
+                return push;
                 }
-            if ( tempCommand == pushRegisterCommandHuman )
+            if ( tempCommand == popCommandHuman )
                 {                
-                return pushR;
-                }
-            if ( tempCommand == popStackCommandHuman )
-                {                
-                return popS;
-                }
-            if ( tempCommand == popRegisterCommandHuman )
-                {                
-                return popR;
+                return pop;
                 }
             if ( tempCommand == inputFromKeyboardCommandHuman )
                 {                

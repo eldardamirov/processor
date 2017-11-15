@@ -24,6 +24,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		864AA20C1FBCFA89002A61CC /* machineCode.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = machineCode.txt; sourceTree = "<group>"; };
+		864AA20D1FBCFAC3002A61CC /* humanCode.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = humanCode.txt; sourceTree = "<group>"; };
+		8661FEA71FAE0105004C3D13 /* processor.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = processor.profdata; sourceTree = "<group>"; };
 		86EC60471FA1DCA200F0906D /* processor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = processor; sourceTree = BUILT_PRODUCTS_DIR; };
 		86EC604A1FA1DCA200F0906D /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		86EC60511FA1DCDA00F0906D /* stack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
@@ -44,11 +47,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8661FEA61FAE0105004C3D13 /* OptimizationProfiles */ = {
+			isa = PBXGroup;
+			children = (
+				8661FEA71FAE0105004C3D13 /* processor.profdata */,
+			);
+			path = OptimizationProfiles;
+			sourceTree = "<group>";
+		};
 		86EC603E1FA1DCA200F0906D = {
 			isa = PBXGroup;
 			children = (
 				86EC60491FA1DCA200F0906D /* processor */,
 				86EC60481FA1DCA200F0906D /* Products */,
+				864AA20D1FBCFAC3002A61CC /* humanCode.txt */,
+				864AA20C1FBCFA89002A61CC /* machineCode.txt */,
+				8661FEA61FAE0105004C3D13 /* OptimizationProfiles */,
 			);
 			sourceTree = "<group>";
 		};
@@ -245,6 +259,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AUWER2S3N2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -255,6 +270,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_USE_OPTIMIZATION_PROFILE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = AUWER2S3N2;
 				PRODUCT_NAME = "$(TARGET_NAME)";

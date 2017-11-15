@@ -17,4 +17,7 @@ const char* stackStorageError = "Something is wrong with stack storage or stack 
 
 const char* stackBeginningError = "New beginning of stack is incorrect. (Note that returning value in this case isn't prorep one) ¯|_(ツ)_/¯ \n";
 
+const char* detectVariableTypeError = "Something strange occured during detecting detecting type of stack data. ¯|_(ツ)_/¯ \n";
+
 #endif /* logsConstants_h */
+
