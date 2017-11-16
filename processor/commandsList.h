@@ -33,7 +33,7 @@ enum commands
     pushR, popR, // 14 - 15
     pushS, popS,
     border,
-    pushRAM, popRAM,
+    pushRAM, popRAM, 
     push, pop // 21 - 22
     };
 

@@ -23,7 +23,7 @@
 class Processor
     {
     public:
-        Processor() : processorStack ( Stack <double> ( 1000, LOW ) )
+        Processor() : processorStack ( Stack <double> ( 256, LOW ) )
             {
             
             }
@@ -34,42 +34,31 @@ class Processor
             readFromFile machineCode ( "machineCode.txt" );
             
             int currentCommandId = 0;
-            std::string argument = "5";
+            std::string argument = "";
             
             //printf ( "%s", machineCode.getNextString().c_str() );
             
             while ( !machineCode.isEnd() )
                 {
-//                printf ( "\n1\n" );
-//                std::string temptemp = machineCode.getNextString();
-//                printf ( "%s", machineCode.getNextString() );
-                
                 currentCommandId = std::stoi ( machineCode.getNextString() );
                 
                 if ( currentCommandId > border )
                     {
                     argument = machineCode.getNextString();
-//                    printf ( "\n\nAND HERE I WAS, AND WHAT IT WAS: %s\n\n", argument.c_str() );
+
                     }
-//                printf ( "gg" );
                     
                 if ( doCommand ( currentCommandId, argument ) == -2 )
                     {
                     printf ( "Goodbye" );
-//                    break;
                     return 0;
                     }
-                
-//                printf ( "HEY: %f", processorStack.top() );
+            
 //                processorStack.printItAll();
                 
                 argument = "";
                 }
                 
-//            printf ( "%f", *processorStack.top() );
-            
-            
-
             
             return 0;
             }
@@ -286,13 +275,8 @@ class Processor
         
         int stackPushS ( std::string argument )
             {
-//            printf ( "KK %s KK", argument.c_str() );
             double temp = std::stod ( argument ); 
             processorStack.push ( temp );
-            
-            
-//            printf ( "  %f III was here\n", *processorStack.top() );
-            
             
             return 0;
             }
