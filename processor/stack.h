@@ -64,7 +64,7 @@ template <typename typeOfData> class Stack
             
             
 //            stackBeginning = new stackUnit [ 1 ];
-//            delete[] stackBeginning;
+            delete[] stackBeginning; // ******************
                                 
             }
             
@@ -94,7 +94,7 @@ template <typename typeOfData> class Stack
             
             return 0;
             }
-            
+                        
         typeOfData pop()
             {
             stackCurrentElement--;

@@ -28,7 +28,6 @@ class Processor
             
             }
     
-    
         int boss()
             {
             readFromFile machineCode ( "machineCode.txt" );
@@ -142,7 +141,7 @@ class Processor
             
         int stackOut()
             {
-            printf ( "%f", *processorStack.top() );
+            printf ( "%f\n", *processorStack.top() );
             processorStack.pop();
             
             return 0;
@@ -304,6 +303,7 @@ class Processor
     };
 
 
+
 int main()
     {
     compiler testCompiler ( "humanCode.txt", "machineCode.txt" );
@@ -329,8 +329,8 @@ int main ( int argc, const char * argv[] )
 */    
 
     
-/*
-    
+
+/*    
 int main()
     {
     readFromFile action ( "humanCodee.txt" );
@@ -350,7 +350,7 @@ int main()
     {
     Stack <double> tempStack ( 2, LOW );
     
-    for ( int i = 0; i < 1999; i++ )
+    for ( int i = 0; i < 20000000; i++ )
         {
         tempStack.push ( 5.488573848 );
         }
@@ -368,9 +368,9 @@ int main()
     
     return 0;
     }
+
+    
 */
-    
-    
     
     
     

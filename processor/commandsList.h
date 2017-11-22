@@ -27,14 +27,15 @@ enum commands
     {
     hlt, nullCommand,
     in, out,
+    jmp, jne, ja, jae, jb, jbe,
     add, sub, mul, myDiv, // 7
     mySin, myCos, mySqrt, myAbs, // 11
     myDup, dump,
     pushR, popR, // 14 - 15
+    pop, border,
     pushS, popS,
-    border,
     pushRAM, popRAM, 
-    push, pop // 21 - 22
+    push // 21 - 22
     };
 
 
