@@ -24,6 +24,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8600849C1FC62C250002CAAA /* basicMethods.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = basicMethods.h; sourceTree = "<group>"; };
 		864AA20C1FBCFA89002A61CC /* machineCode.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = machineCode.txt; sourceTree = "<group>"; };
 		864AA20D1FBCFAC3002A61CC /* humanCode.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = humanCode.txt; sourceTree = "<group>"; };
 		8661FEA71FAE0105004C3D13 /* processor.profdata */ = {isa = PBXFileReference; lastKnownFileType = file; path = processor.profdata; sourceTree = "<group>"; };
@@ -81,6 +82,7 @@
 				86F2CF481FAA614000D75CF7 /* commandsList.h */,
 				86F2CF4C1FAA6EC500D75CF7 /* compiler.h */,
 				86EC60511FA1DCDA00F0906D /* stack.h */,
+				8600849C1FC62C250002CAAA /* basicMethods.h */,
 				86EC60531FA1DD3B00F0906D /* fileIO.h */,
 				86EC60521FA1DD3B00F0906D /* logsConstants.h */,
 			);

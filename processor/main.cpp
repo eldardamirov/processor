@@ -41,11 +41,11 @@ class Processor
                 {
                 currentCommandId = std::stoi ( machineCode.getNextString() );
                 
-                if ( currentCommandId > border )
-                    {
-                    argument = machineCode.getNextString();
-
-                    }
+//                if ( currentCommandId > border )
+//                    {
+//                    argument = machineCode.getNextString();
+//
+//                    }
                     
                 if ( doCommand ( currentCommandId, argument ) == -2 )
                     {
@@ -71,7 +71,7 @@ class Processor
         
         // REGISTERS
         double ax = 0.0, bx = 0.0, cx = 0.0, dx = 0.0;
-        double npu1 = 0.0, npu2 = 0.0;
+        double n1 = 0.0, n2 = 0.0, nS = 0.0;
         double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
         
         
@@ -304,6 +304,8 @@ class Processor
 
 
 
+/*
+
 int main()
     {
     compiler testCompiler ( "humanCode.txt", "machineCode.txt" );
@@ -315,34 +317,34 @@ int main()
     return 0;
     }
 
+*/
 
 
-/*
 int main ( int argc, const char * argv[] ) 
     {
     compiler myCompiler ( "humanCode.txt", "machineCode.txt" );  
-    Processor myProcessor;
-    myProcessor.boss();
+//    Processor myProcessor;
+//    myProcessor.boss();
     
     return 0;
     }
-*/    
+    
 
     
 
-/*    
+/*
 int main()
     {
-    readFromFile action ( "humanCodee.txt" );
-    while ( ! ( action.isEnd() ) )
-        {
-        std::cout << action.getNextString() << std::endl;
-        }
+    readFromFile action ( "humanCode.txt" );
+    
+    std::cout << action.getNextString() << std::endl;
+    std::cout << "AAA:" << action.getTillEndOfLine() << std::endl;
+        
     
     return 0;
     }
+/*
 
-*/
 
 /*
 

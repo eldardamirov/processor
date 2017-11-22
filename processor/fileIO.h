@@ -80,7 +80,7 @@ class readFromFile
                 }
                 
                 
-            while ( ( tempCurrentChar != ' ' ) && ( tempCurrentChar != '\n' ) && !( currentChar - 1 > fileSize ) )
+            while ( ( tempCurrentChar != ' ' ) && ( tempCurrentChar != '\n' ) && !( ( currentChar - 1 ) > fileSize ) )
                 {
                 tempNextString = tempNextString + tempCurrentChar;
                 
@@ -88,6 +88,26 @@ class readFromFile
                 }
             
             return tempNextString;
+            }
+            
+        std::string getTillEndOfLine()
+            {
+            std::string tempTillLineEnd = "";
+            char tempCurrentChar = ' ';
+            
+            if ( !isEnd() )
+                {
+                tempCurrentChar = getNextChar();
+                }
+                
+            while ( ( tempCurrentChar != '\n' ) && !( ( currentChar - 1 ) > fileSize ) )
+                {
+                tempTillLineEnd = tempTillLineEnd + tempCurrentChar;
+                
+                tempCurrentChar = getNextChar();
+                }
+                
+            return tempTillLineEnd;
             }
 
 
@@ -106,6 +126,23 @@ class readFromFile
         bool isEnd()
             {
             return ( currentChar + 1 ) >= fileSize;
+            }
+            
+        int calculateLinesQuantity()  // returns EXACT number of lines, including empty lines; OPTIONAL0
+            {
+            int linesQuantity = 0;
+            char* index = strchr ( ( ( char* ) ( mapping->dataPointer ) ), '\n' );
+
+            char* filePointerEnd = strchr ( ( ( char* ) ( mapping->dataPointer ) ), '\0' ) - 1;
+            while ( ( index ) < filePointerEnd )
+                {
+                linesQuantity++;
+                index = ( strchr ( ( index + 1 ), '\n' ) );
+                }
+
+            linesQuantity = linesQuantity + 1;
+
+            return linesQuantity;
             }
 
     private:

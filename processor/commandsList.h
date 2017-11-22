@@ -27,15 +27,24 @@ enum commands
     {
     hlt, nullCommand,
     in, out,
-    jmp, jne, ja, jae, jb, jbe,
     add, sub, mul, myDiv, // 7
     mySin, myCos, mySqrt, myAbs, // 11
     myDup, dump,
+    borderJump,
+    jmp, jne, ja, jae, jb, jbe,
+    borderArgument,
     pushR, popR, // 14 - 15
-    pop, border,
+    pop,
     pushS, popS,
     pushRAM, popRAM, 
     push // 21 - 22
+    };
+    
+enum registers
+    {
+    ax, bx, cx, dx,
+    r1, r2, r3, r4,
+    n1, n2, nS
     };
 
 

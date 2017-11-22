@@ -15,6 +15,16 @@
 
 #include "fileIO.h"
 #include "commandsList.h"
+#include "basicMethods.h"
+
+struct command  
+    {
+    int commandId = 0;
+    int operandaModifier = 0;
+    double argument = 0;
+    double argument2 = 0; // for int part in memory adressing;
+    std::string argumentS = "";
+    };
 
 
 class compiler
@@ -24,7 +34,7 @@ class compiler
             {
             compilationStartTime = time ( NULL );
             
-            printf ( "COMPILATION...\n" );
+            printf ( "COMPILATION...\n");
             
             humanCodeFileName = tempHumanCodeFileName;
             machineCodeFileName = tempMachineCodeFileName;
@@ -46,32 +56,56 @@ class compiler
         std::string humanCodeFileName = "", machineCodeFileName = "";
         //// ------------------------------------------------------------------------------------------------      
         
-        int makeMachineCode()
+        command* makeMachineCode()
             {
+            
+            
+            
+//////---
             readFromFile humanCodeFile ( "humanCode.txt" );
             writeToFile machineCodeFile ( "machineCode.txt", ( humanCodeFile.getFileSize() + 1 ) );
             
-            std::string currentCommand = "";
-            int currentCommandId = 0;
+            command* commandsArray = new command [ humanCodeFile.calculateLinesQuantity() ];
             
+            checkArgumentState ( "[n2-6]", commandsArray, 0 );
+            std::cout << "A:" << commandsArray [ 0 ].commandId << "B:" << commandsArray [ 0 ].operandaModifier << "C:" << commandsArray [ 0 ].argument << "D:" << commandsArray [ 0 ].argument2 << "E:" << commandsArray [ 0 ].argumentS; 
             
-            while ( !humanCodeFile.isEnd() )
-                {
-                currentCommand = humanCodeFile.getNextString();
-                currentCommandId = getCommandId ( currentCommand );
+//            printf ( "CHEEECK: %f, %f", commandsArray [ 0 ].argument, commandsArray [ 0 ].argument2 );
+            
+//            std::string currentCommand = "";
+//            int currentCommandId = 0;
+//            std::string preAnalysedArgument = "";
+//            
+//            
+//            while ( !humanCodeFile.isEnd() )
+//                {
+//                currentCommand = humanCodeFile.getNextString();
+//                currentCommandId = getCommandId ( currentCommand );
+//                
+//                if ( currentCommandId > borderArgument )
+//                    {
+//                    preAnalysedArgument = humanCodeFile.getTillEndOfLine();
+//                    
+//                    
+//                    }
+//                else if ( currentCommandId > borderJump )
+//                    {
+//                    
+//                    }
 
+/////--
                 
                 
-                machineCodeFile.writeString ( std::to_string ( currentCommandId ) );
+//                machineCodeFile.writeString ( std::to_string ( currentCommandId ) );
                 
 
-                if ( currentCommandId > popS ) // popS, because after popS in our enum all commands need arguments;
-                    {
-                    machineCodeFile.writeString ( ( " " + ( humanCodeFile.getNextString() ) ) );
-                    }
+//                if ( currentCommandId > popS ) // popS, because after popS in our enum all commands need arguments;
+//                    {
+//                    machineCodeFile.writeString ( ( " " + ( humanCodeFile.getNextString() ) ) );
+//                    }
                     
-                machineCodeFile.writeNextChar ( '\n' );
-                }
+//                machineCodeFile.writeNextChar ( '\n' );
+//                }
             
             return 0;
             }
@@ -145,6 +179,184 @@ class compiler
             
             return nullCommand;
             }
+            
+           
+        int checkArgumentState ( std::string preAnalysedArgument, command* commandsArray, int currentCommandNumber )
+            {
+            
+            size_t argumentLength = preAnalysedArgument.size();
+            if ( argumentLength > 0 )
+                {
+                if ( preAnalysedArgument [ 0 ] != '[' )
+                    {
+                    return -1; // Error: it isn't argument, it is command, should pass control to usual command analyze next iteration;
+                    }
+                    
+                if ( isDigit ( preAnalysedArgument [ 1 ] ) == true )
+                    {
+                    std::string tempStringForInt = "";
+                    
+                    for ( int i = 1; i < argumentLength; i++ ) 
+                        {
+                        if ( isDigit ( preAnalysedArgument [ i ] ) == true )
+                            {
+                            tempStringForInt = tempStringForInt + preAnalysedArgument [ i ];
+                            }
+                        else
+                            {
+                            break;
+                            }
+                        }
+                    
+//                    commandsArray [ currentCommandNumber ].argument = tempStringForInt;
+                    commandsArray [ currentCommandNumber ].operandaModifier = 0;
+                    
+                    printf ( "0" );
+                    
+                    return 0;
+                    }
+                
+                if ( isLetter ( preAnalysedArgument [ 1 ] ) == true )
+                    { 
+                    std::string tempStringForRegister = tempStringForRegister + preAnalysedArgument [ 1 ];
+                    tempStringForRegister = tempStringForRegister + preAnalysedArgument [ 2 ];
+                    std::cout << "HEEY: " << preAnalysedArgument [ 1 ] << " " << preAnalysedArgument [ 2 ]  << std::endl;
+                    
+                    if ( preAnalysedArgument [ 3 ] == ']' )
+                        {
+                        commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
+                        commandsArray [ currentCommandNumber ].operandaModifier = 1;
+                        printf ( "1" );
+                        
+                        return 0;
+                        }
+                    
+                    if ( isArithmetic ( preAnalysedArgument [ 3 ] ) == true )
+                        {
+                        if ( isDigit ( preAnalysedArgument [ 4 ] ) == true )
+                            {
+        
+                            std::string tempStringForInt = "";
+                            for ( int i = 4; i < argumentLength; i++ )
+                                {
+                                if ( isDigit ( preAnalysedArgument [ i ] ) == true )
+                                    {
+                                    tempStringForInt = tempStringForInt + preAnalysedArgument [ i ];
+                                    }
+                                else
+                                    {
+                                    break;
+                                    }
+                                }
+                            
+                            
+                            commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
+                            commandsArray [ currentCommandNumber ].argumentS = tempStringForInt;
+                            if ( preAnalysedArgument [ 3 ] == '+' )
+                                {
+                                commandsArray [ currentCommandNumber ].operandaModifier = 2;
+                                printf ( "2" );
+                                }
+                            else if ( preAnalysedArgument [ 3 ] == '-' )
+                                {
+                                commandsArray [ currentCommandNumber ].operandaModifier = 4;
+                                printf ( "4" );
+                                }
+                            
+                            return 0;
+                            }
+
+//                         std::cout << "!!" << ( int ) preAnalysedArgument [ 4 ] << "!!";
+                         if ( isLetter ( preAnalysedArgument [ 4 ] ) == true )
+                            {
+                            printf ( "EEEFG" );
+                            std::string tempStringForRegister2 = tempStringForRegister2 + preAnalysedArgument [ 4 ];
+                            tempStringForRegister2 = tempStringForRegister2 + preAnalysedArgument [ 5 ];
+                            
+                            commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
+                            std::cout << "CHECK:" << tempStringForRegister << " " << tempStringForRegister2 << "END";
+                            commandsArray [ currentCommandNumber ].argument2 = recogniseRegister ( tempStringForRegister2 );
+                            if ( preAnalysedArgument [ 3 ] == '+' )
+                                {
+                                commandsArray [ currentCommandNumber ].operandaModifier = 3;
+                                printf ( "3" );
+                                }
+                            else if ( preAnalysedArgument [ 3 ] == '-' )
+                                {
+                                printf ( "5" );
+                                commandsArray [ currentCommandNumber ].operandaModifier = 5;
+                                }
+                                
+                            return 0;
+                            }
+                        }
+                        
+            
+                    }
+                                
+                }
+            
+            return 0;
+            }
+            
+        
+        int recogniseRegister ( std::string registerName )
+            {
+//            printf ( "HERE WHAT I'VE GOT: %s\n", registerName.c_str() );
+            std::cout << std::endl << "II:" << registerName << std::endl;
+            if ( registerName == "ax" )
+                {
+                return ax;
+                }
+            if ( registerName == "bx" )
+                {
+                return bx;
+                }
+            if ( registerName == "cx" )
+                {
+                return cx;
+                }
+            if ( registerName == "dx" )
+                {
+                return dx;
+                }
+            //// ------------------------------------------------------------------------------------------------    
+            if ( registerName == "r1" )
+                {
+                return r1;
+                }
+            if ( registerName == "r2" )
+                {
+                return r2;
+                }
+            if ( registerName == "r3" )
+                {
+                return r3;
+                }
+            if ( registerName == "r4" )
+                {
+                return r4;
+                }
+            //// ------------------------------------------------------------------------------------------------
+            if ( registerName == "n1" )
+                {
+                return n1;
+                }
+            if ( registerName == "n2" )
+                {
+                return n2;
+                }
+            if ( registerName == "nS" )
+                {
+                return nS;
+                }
+                
+            //// HERE SHOULD BE ERROR, register not found during parsing;    
+            
+            return -1;
+            }
+
+            
         
         //// ------------------------------------------------------------------------------------------------
         
