@@ -33,11 +33,11 @@ enum commands
     borderJump,
     jmp, jne, ja, jae, jb, jbe,
     borderArgument,
-    pushR, popR, // 14 - 15
-    pop,
+    pushR, popR, 
+    pop, // 24
     pushS, popS,
     pushRAM, popRAM, 
-    push // 21 - 22
+    push // 29
     };
     
 enum registers
@@ -54,12 +54,6 @@ const char* haultCommandHuman = "hlt";
 
 const char* pushCommandHuman = "push";
 const char* popCommandHuman = "pop";
-
-//const char* pushRegisterCommandHuman = "pushR";
-//const char* popRegisterCommandHuman = "popR";
-
-//const char* pushStackCommandHuman = "pushS";
-//const char* popStackCommandHuman = "pushR";
 
 const char* inputFromKeyboardCommandHuman = "in";
 const char* outputCommandHuman = "out";

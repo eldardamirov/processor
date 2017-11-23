@@ -20,7 +20,7 @@
 struct command  
     {
     int commandId = 0;
-    int operandaModifier = 0;
+    int operandaModifier = -1;
     double argument = 0;
     double argument2 = 0; // for int part in memory adressing;
     std::string argumentS = "";
@@ -65,33 +65,77 @@ class compiler
             readFromFile humanCodeFile ( "humanCode.txt" );
             writeToFile machineCodeFile ( "machineCode.txt", ( humanCodeFile.getFileSize() + 1 ) );
             
-            command* commandsArray = new command [ humanCodeFile.calculateLinesQuantity() ];
+            int linesQuantity = humanCodeFile.calculateLinesQuantity();
             
-            checkArgumentState ( "[n2-6]", commandsArray, 0 );
-            std::cout << "A:" << commandsArray [ 0 ].commandId << "B:" << commandsArray [ 0 ].operandaModifier << "C:" << commandsArray [ 0 ].argument << "D:" << commandsArray [ 0 ].argument2 << "E:" << commandsArray [ 0 ].argumentS; 
+            command* commandsArray = new command [ linesQuantity ];
+            
+//            std::cout << checkArgumentState ( "pop [n2-6]", commandsArray, 0 );
+//            std::cout << "A:" << commandsArray [ 0 ].commandId << "B:" << commandsArray [ 0 ].operandaModifier << "C:" << commandsArray [ 0 ].argument << "D:" << commandsArray [ 0 ].argument2 << "E:" << commandsArray [ 0 ].argumentS; 
             
 //            printf ( "CHEEECK: %f, %f", commandsArray [ 0 ].argument, commandsArray [ 0 ].argument2 );
             
-//            std::string currentCommand = "";
-//            int currentCommandId = 0;
-//            std::string preAnalysedArgument = "";
-//            
-//            
-//            while ( !humanCodeFile.isEnd() )
-//                {
-//                currentCommand = humanCodeFile.getNextString();
-//                currentCommandId = getCommandId ( currentCommand );
-//                
-//                if ( currentCommandId > borderArgument )
-//                    {
-//                    preAnalysedArgument = humanCodeFile.getTillEndOfLine();
-//                    
-//                    
-//                    }
-//                else if ( currentCommandId > borderJump )
-//                    {
-//                    
-//                    }
+            int currentCommandNumber = 0;
+            std::string currentCommand = "";
+            int currentCommandId = 0;
+            std::string preAnalysedArgument = "";
+            
+            int flag = 0; // flag for cases, when pop and push doesn't have arguments at all;
+            
+            while ( !humanCodeFile.isEnd() )
+                {
+                if ( flag != -1 )
+                    {
+                    currentCommand = humanCodeFile.getNextString();
+                    }
+                
+                flag = 0;    
+                
+                currentCommandId = getCommandId ( currentCommand );
+                commandsArray [ currentCommandNumber ].commandId = currentCommandId;
+                
+                if ( currentCommandId > borderArgument )
+                    {
+                    preAnalysedArgument = humanCodeFile.getTillEndOfLine();
+                    flag = checkArgumentState ( preAnalysedArgument, commandsArray, currentCommandNumber );
+                    }
+                else if ( currentCommandId > borderJump )
+                    {
+                    //////// JUMP
+                    
+                    ////////
+                    }
+                    
+                if ( flag != -1 )
+                    {
+                    currentCommandNumber++;
+                    }
+                }
+                printf ( "HEYY %d", linesQuantity );
+                
+                
+                for ( int i = 0; i < linesQuantity; i++ )   
+                    {
+                    std::string currentCommandDescription =  ( ( std::to_string ( commandsArray [ i ].commandId ) ) + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) );
+                    if ( ( commandsArray [ i ].operandaModifier == 2 ) || ( commandsArray [ i ].operandaModifier == 4 ) )
+                        {
+                        currentCommandDescription = currentCommandDescription + " " + std::to_string ( commandsArray [ i ].argument ) + " " + commandsArray [ i ].argumentS + "\n";
+                        }
+                    else if ( ( commandsArray [ i ].operandaModifier == 3 ) || ( commandsArray [ i ].operandaModifier == 5 ) )
+                        {
+                        currentCommandDescription = currentCommandDescription + " " + std::to_string ( commandsArray [ i ].argument ) + " " + std::to_string ( commandsArray [ i ].argument2 ) + "\n";
+                        }
+                    else if ( commandsArray [ i ].operandaModifier == 1 )
+                        {
+                        currentCommandDescription = currentCommandDescription + " " + std::to_string ( commandsArray [ i ].argument ) + "\n";
+                        }
+                    else if ( commandsArray [ i ].operandaModifier == 0 )
+                        {
+                        currentCommandDescription = currentCommandDescription + " " + commandsArray [ i ].argumentS + "\n";
+                        }
+                    
+                    std::cout << "DEBUG:" << currentCommandDescription << std::endl;
+                    machineCodeFile.writeString ( currentCommandDescription );
+                    }
 
 /////--
                 
@@ -115,7 +159,7 @@ class compiler
         
         int getCommandId ( std::string tempCommand )
             {
-        
+            printf ( "HERE WHAT I GET: %s\n", tempCommand.c_str() );
             if ( tempCommand == haultCommandHuman )
                 {                
                 return hlt;
@@ -208,10 +252,8 @@ class compiler
                             }
                         }
                     
-//                    commandsArray [ currentCommandNumber ].argument = tempStringForInt;
                     commandsArray [ currentCommandNumber ].operandaModifier = 0;
                     
-                    printf ( "0" );
                     
                     return 0;
                     }
@@ -226,7 +268,6 @@ class compiler
                         {
                         commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
                         commandsArray [ currentCommandNumber ].operandaModifier = 1;
-                        printf ( "1" );
                         
                         return 0;
                         }
@@ -255,35 +296,29 @@ class compiler
                             if ( preAnalysedArgument [ 3 ] == '+' )
                                 {
                                 commandsArray [ currentCommandNumber ].operandaModifier = 2;
-                                printf ( "2" );
                                 }
                             else if ( preAnalysedArgument [ 3 ] == '-' )
                                 {
                                 commandsArray [ currentCommandNumber ].operandaModifier = 4;
-                                printf ( "4" );
                                 }
                             
                             return 0;
                             }
 
-//                         std::cout << "!!" << ( int ) preAnalysedArgument [ 4 ] << "!!";
+
                          if ( isLetter ( preAnalysedArgument [ 4 ] ) == true )
                             {
-                            printf ( "EEEFG" );
                             std::string tempStringForRegister2 = tempStringForRegister2 + preAnalysedArgument [ 4 ];
                             tempStringForRegister2 = tempStringForRegister2 + preAnalysedArgument [ 5 ];
                             
                             commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
-                            std::cout << "CHECK:" << tempStringForRegister << " " << tempStringForRegister2 << "END";
                             commandsArray [ currentCommandNumber ].argument2 = recogniseRegister ( tempStringForRegister2 );
                             if ( preAnalysedArgument [ 3 ] == '+' )
                                 {
                                 commandsArray [ currentCommandNumber ].operandaModifier = 3;
-                                printf ( "3" );
                                 }
                             else if ( preAnalysedArgument [ 3 ] == '-' )
                                 {
-                                printf ( "5" );
                                 commandsArray [ currentCommandNumber ].operandaModifier = 5;
                                 }
                                 

@@ -136,8 +136,9 @@ class readFromFile
             char* filePointerEnd = strchr ( ( ( char* ) ( mapping->dataPointer ) ), '\0' ) - 1;
             while ( ( index ) < filePointerEnd )
                 {
-                linesQuantity++;
+                
                 index = ( strchr ( ( index + 1 ), '\n' ) );
+                linesQuantity++;
                 }
 
             linesQuantity = linesQuantity + 1;
