@@ -17,6 +17,10 @@
 #include "commandsList.h"
 #include "basicMethods.h"
 
+
+#define commandState commandsArray [ currentLine ].operandaModifier
+
+
 struct command  
     {
     int commandId = 0;
@@ -119,9 +123,58 @@ class compiler
             /*
             for ( int i = 0; i < linesQuantity; i++ )
                 {
-                std::cout << commandsArray [ i ].commandId << " " << commandsArray [ i ].operandaModifier << " " << commandsArray [ i ].argumentS << " " << commandsArray [ i ].argumentS2 << std::endl;
+                std::cout << commandsArray [ i ].commandId << " " << commandsArray [ i ].operandaModifier << " " << commandsArray [ i ].argument << " " << commandsArray [ i ].argument2 << " " << commandsArray [ i ].argumentS << " " << commandsArray [ i ].argumentS2 << std::endl;
                 }
             */
+            
+            std::string lineToWrite = "";
+            
+            for ( int currentLine = 0; currentLine < linesQuantity + 5; currentLine++ ) 
+                {
+                lineToWrite = "";
+                
+                if ( commandState == -1 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + "\n";
+                    }
+                if ( commandState == 0 )
+                    {
+//                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
+                    }
+                if ( commandState == 1 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + "\n";
+                    }
+                if ( commandState == 2 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + commandsArray [ currentLine ].argumentS2 + "\n"; // !!!!
+                    }
+                if ( commandState == 3 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + " " + std::to_string ( commandsArray [ currentLine ].argument2 ) + "\n";
+                    }
+                if ( commandState == 4 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + commandsArray [ currentLine ].argumentS2 + "\n"; // !!!!
+                    }
+                if ( commandState == 5 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " +    std::to_string ( commandsArray [ currentLine ].argument ) + " " + std::to_string ( commandsArray [ currentLine ].argument2 ) + "\n";
+                    }
+                if ( commandState == 6 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
+                    }
+                if ( commandState == 7 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + "\n"; 
+                    }
+                    
+                machineCodeFile.writeString ( lineToWrite );
+            
+                }
+                
             
             
             return 0;
@@ -240,33 +293,37 @@ class compiler
                     {
                     if ( isLetter ( currentArgumentTemp [ 1 ] ) )
                         {
-                        commandsArray [ currentCommand ].argumentS = getArgumentFromString ( currentArgumentTemp, 0 );
+                        commandsArray [ currentCommand ].argument = recogniseRegister ( getArgumentFromString ( currentArgumentTemp, 0 ) );
                         ////////////////////////////////////////////////////////////////////////////////
                         ////////////////////////////////////////////////////////////////////////////////
                         std::string secondArgument = getArgumentFromString( currentArgumentTemp, 1 );
                         if ( secondArgument.length() != 0 )
                             {
-                            int tempMemoryShift = 0;
-                            
-                            if ( currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 1 ] == '-' )
+                            int tempShift = 0;
+                            std::cout << currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ];
+                            if ( currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ] == '-' )
                                 {
-                                tempMemoryShift = 2;
+                                tempShift = 2;
                                 }
 
-                            if ( isDigit ( currentArgumentTemp [ ( commandsArray [ currentCommand ].argumentS.length() + 2 ) ] ) )
+                            if ( isDigit ( currentArgumentTemp [ ( commandsArray [ currentCommand ].argumentS.length() + 4 ) ] ) )
                                 {
-                                commandsArray [ currentCommand ].operandaModifier = 2 + tempMemoryShift;
+                                commandsArray [ currentCommand ].operandaModifier = 2 + tempShift;
+                                commandsArray [ currentCommand ].argumentS2 = secondArgument;
                                 }
                             else
                                 {
-                                commandsArray [ currentCommand ].operandaModifier = 3 + tempMemoryShift;
+                                commandsArray [ currentCommand ].operandaModifier = 3 + tempShift;
+                                    printf ( "%s", secondArgument.c_str() );
+                                commandsArray [ currentCommand ].argument2 = recogniseRegister ( secondArgument );
                                 }
-                                 
-                            commandsArray [ currentCommand ].argumentS2 = secondArgument;
+                            
+                            memoryShift = 4;
                             }
                         else
                             {
                             commandsArray [ currentCommand ].operandaModifier = 1;
+                            memoryShift = 3;
                             }
                         }
                     }
@@ -283,7 +340,7 @@ class compiler
                 else if ( isLetter ( currentArgumentTemp [ 0 ] ) )
                     {
                     commandsArray [ currentCommand ].operandaModifier = 7;
-                    commandsArray [ currentCommand ].argumentS = currentArgumentTemp;
+                    commandsArray [ currentCommand ].argument = recogniseRegister ( currentArgumentTemp );
                     
                     memoryShift = 3;
                     }
@@ -403,116 +460,7 @@ class compiler
             }
             
            
-        int checkArgumentState ( std::string preAnalysedArgument, command* commandsArray, int currentCommandNumber )
-            {
-            
-            size_t argumentLength = preAnalysedArgument.size();
-            if ( argumentLength > 0 )
-                {
-                if ( preAnalysedArgument [ 0 ] != '[' )
-                    {
-                    return -1; // Error: it isn't argument, it is command, should pass control to usual command analyze next iteration;
-                    }
-                    
-                if ( isDigit ( preAnalysedArgument [ 1 ] ) == true )
-                    {
-                    std::string tempStringForInt = "";
-                    
-                    for ( int i = 1; i < argumentLength; i++ ) 
-                        {
-                        if ( isDigit ( preAnalysedArgument [ i ] ) == true )
-                            {
-                            tempStringForInt = tempStringForInt + preAnalysedArgument [ i ];
-                            }
-                        else
-                            {
-                            break;
-                            }
-                        }
-                    
-                    commandsArray [ currentCommandNumber ].argumentS = tempStringForInt;
-                    commandsArray [ currentCommandNumber ].operandaModifier = 0;
-                    
-                    
-                    return 0;
-                    }
-                
-                if ( isLetter ( preAnalysedArgument [ 1 ] ) == true )
-                    { 
-                    std::string tempStringForRegister = tempStringForRegister + preAnalysedArgument [ 1 ];
-                    tempStringForRegister = tempStringForRegister + preAnalysedArgument [ 2 ];
-//1                    std::cout << "HEEY: " << preAnalysedArgument [ 1 ] << " " << preAnalysedArgument [ 2 ]  << std::endl;
-                    
-                    if ( preAnalysedArgument [ 3 ] == ']' )
-                        {
-                        commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
-                        commandsArray [ currentCommandNumber ].operandaModifier = 1;
-                        
-                        return 0;
-                        }
-                    
-                    if ( isArithmetic ( preAnalysedArgument [ 3 ] ) == true )
-                        {
-                        if ( isDigit ( preAnalysedArgument [ 4 ] ) == true )
-                            {
         
-                            std::string tempStringForInt = "";
-                            for ( int i = 4; i < argumentLength; i++ )
-                                {
-                                if ( isDigit ( preAnalysedArgument [ i ] ) == true )
-                                    {
-                                    tempStringForInt = tempStringForInt + preAnalysedArgument [ i ];
-                                    }
-                                else
-                                    {
-                                    break;
-                                    }
-                                }
-                            
-                            
-                            commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
-                            commandsArray [ currentCommandNumber ].argumentS = tempStringForInt;
-                            if ( preAnalysedArgument [ 3 ] == '+' )
-                                {
-                                commandsArray [ currentCommandNumber ].operandaModifier = 2;
-                                }
-                            else if ( preAnalysedArgument [ 3 ] == '-' )
-                                {
-                                commandsArray [ currentCommandNumber ].operandaModifier = 4;
-                                }
-                            
-                            return 0;
-                            }
-
-
-                         if ( isLetter ( preAnalysedArgument [ 4 ] ) == true )
-                            {
-                            std::string tempStringForRegister2 = tempStringForRegister2 + preAnalysedArgument [ 4 ];
-                            tempStringForRegister2 = tempStringForRegister2 + preAnalysedArgument [ 5 ];
-                            
-                            commandsArray [ currentCommandNumber ].argument = recogniseRegister ( tempStringForRegister );
-                            commandsArray [ currentCommandNumber ].argument2 = recogniseRegister ( tempStringForRegister2 );
-                            if ( preAnalysedArgument [ 3 ] == '+' )
-                                {
-                                commandsArray [ currentCommandNumber ].operandaModifier = 3;
-                                }
-                            else if ( preAnalysedArgument [ 3 ] == '-' )
-                                {
-                                commandsArray [ currentCommandNumber ].operandaModifier = 5;
-                                }
-                                
-                            return 0;
-                            }
-                        }
-                        
-            
-                    }
-                                
-                }
-            
-            return 0;
-            }
-            
         
         int recogniseRegister ( std::string registerName )
             {
