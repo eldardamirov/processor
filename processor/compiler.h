@@ -72,7 +72,7 @@ class compiler
             command* commandsArray = new command [ linesQuantity ];
             int commandInMemoryLocation = 0;
             
-            std::string currentLine = "";
+            std::string currentInputLine = "";
             
             //// ------------------------------------------------------------------------------------------------
             std::string currentCommandTemp = "";
@@ -83,8 +83,8 @@ class compiler
             
             for ( int currentCommand = 0; currentCommand < linesQuantity; currentCommand++ )
                 {
-                currentLine = humanCodeFile.getTillEndOfLine();
-                currentCommandTemp = getWordInString ( currentLine, 0 );
+                currentInputLine = humanCodeFile.getTillEndOfLine();
+                currentCommandTemp = getWordInString ( currentInputLine, 0 );
                 
                 
                 currentCommandIdTemp = getCommandId ( currentCommandTemp );
@@ -104,7 +104,7 @@ class compiler
                         }
                     else
                         {
-                        currentArgumentTemp = clearFromSpaces ( getWordInString ( currentLine, 1 ) );
+                        currentArgumentTemp = clearFromSpaces ( getWordInString ( currentInputLine, 1 ) );
                     
                         if ( currentArgumentTemp.size() == 0 )
                             {
@@ -129,7 +129,7 @@ class compiler
             
             std::string lineToWrite = "";
             
-            for ( int currentLine = 0; currentLine < linesQuantity + 5; currentLine++ ) 
+            for ( int currentLine = 0; currentLine < linesQuantity; currentLine++ ) 
                 {
                 lineToWrite = "";
                 
@@ -140,7 +140,8 @@ class compiler
                 if ( commandState == 0 )
                     {
 //                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
-                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
+                    std::string temp = commandsArray [ currentLine ].argumentS;  // !!!!
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + temp + "\n";
                     }
                 if ( commandState == 1 )
                     {
