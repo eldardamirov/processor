@@ -141,7 +141,7 @@ class Processor
             
         int stackOut()
             {
-            printf ( "%f\n", *processorStack.top() );
+//            printf ( "%f\n", *processorStack.top() );
             processorStack.pop();
             
             return 0;

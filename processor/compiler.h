@@ -24,6 +24,7 @@ struct command
     double argument = 0;
     double argument2 = 0; // for int part in memory adressing;
     std::string argumentS = "";
+    std::string argumentS2 = "";
     };
 
 
@@ -58,120 +59,260 @@ class compiler
         
         command* makeMachineCode()
             {
-            
-            
-            
-//////---
+            //// ------------------------------------------------------------------------------------------------
             readFromFile humanCodeFile ( "humanCode.txt" );
             writeToFile machineCodeFile ( "machineCode.txt", ( humanCodeFile.getFileSize() + 1 ) );
             
             int linesQuantity = humanCodeFile.calculateLinesQuantity();
             
             command* commandsArray = new command [ linesQuantity ];
+            int commandInMemoryLocation = 0;
             
-//            std::cout << checkArgumentState ( "pop [n2-6]", commandsArray, 0 );
-//            std::cout << "A:" << commandsArray [ 0 ].commandId << "B:" << commandsArray [ 0 ].operandaModifier << "C:" << commandsArray [ 0 ].argument << "D:" << commandsArray [ 0 ].argument2 << "E:" << commandsArray [ 0 ].argumentS; 
+            std::string currentLine = "";
             
-//            printf ( "CHEEECK: %f, %f", commandsArray [ 0 ].argument, commandsArray [ 0 ].argument2 );
+            //// ------------------------------------------------------------------------------------------------
+            std::string currentCommandTemp = "";
+            std::string currentArgumentTemp = "";
+            int currentCommandIdTemp = 0;
+            //// ------------------------------------------------------------------------------------------------
             
-            int currentCommandNumber = 0;
-            std::string currentCommand = "";
-            int currentCommandId = 0;
-            std::string preAnalysedArgument = "";
             
-            int flag = 0; // flag for cases, when pop and push doesn't have arguments at all;
-            
-            while ( !humanCodeFile.isEnd() )
+            for ( int currentCommand = 0; currentCommand < linesQuantity; currentCommand++ )
                 {
-                printf ( "\nYYYY\n" );
-                if ( flag != -1 )
+                currentLine = humanCodeFile.getTillEndOfLine();
+                currentCommandTemp = getWordInString ( currentLine, 0 );
+                
+                
+                currentCommandIdTemp = getCommandId ( currentCommandTemp );
+                commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
+                
+//                std::cout << currentCommandIdTemp << "\n";
+                
+                if ( ( currentCommandIdTemp < borderJump ) && ( currentCommandIdTemp != nullCommand ) )
                     {
-                    currentCommand = humanCodeFile.getNextString();
+                    commandInMemoryLocation++;
                     }
-                
-                flag = 0;    
-                
-                currentCommandId = getCommandId ( currentCommand );
-                commandsArray [ currentCommandNumber ].commandId = currentCommandId;
-                
-                if ( currentCommandId > borderArgument )
+                else
                     {
-                    preAnalysedArgument = humanCodeFile.getTillEndOfLine();
-                    flag = checkArgumentState ( preAnalysedArgument, commandsArray, currentCommandNumber );
-                    }
-                else if ( currentCommandId > borderJump )
-                    {
-                    //////// JUMP
-                    
-                    ////////
-                    }
-                    
-                if ( flag != -1 )
-                    {
-                    currentCommandNumber++;
-                    }
-                }
-                printf ( "HEYY %d", linesQuantity );
-                
-                
-                for ( int i = 0; i < linesQuantity; i++ )   
-                    {
-                    std::string currentCommandDescription = ( std::to_string ( commandsArray [ i ].commandId ) );
-                    if ( ( commandsArray [ i ].operandaModifier == 2 ) || ( commandsArray [ i ].operandaModifier == 4 ) )
+                    if ( currentCommandIdTemp < borderArgument )
                         {
-                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + " " + commandsArray [ i ].argumentS + "\n";
-                        }
-                    else if ( ( commandsArray [ i ].operandaModifier == 3 ) || ( commandsArray [ i ].operandaModifier == 5 ) )
-                        {
-                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + " " + std::to_string ( commandsArray [ i ].argument2 ) + "\n";
-                        }
-                    else if ( commandsArray [ i ].operandaModifier == 1 )
-                        {
-                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + "\n";
-//                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + ( commandsArray [ i ].argumentS ) + "\n";
-                        }
-                    else if ( commandsArray [ i ].operandaModifier == 0 )
-                        {
-                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + commandsArray [ i ].argumentS + "\n";
-//                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + "\n";
+                        // JUMPs HERE;
                         }
                     else
                         {
-                        currentCommandDescription = currentCommandDescription + "\n";
-                        }
+                        currentArgumentTemp = clearFromSpaces ( getWordInString ( currentLine, 1 ) );
                     
-                    if ( i == 1 )
-                        {
-                        std::cout << "\n\n\nBUUUGG: " << commandsArray [ currentCommandNumber ].commandId << " " << commandsArray [ currentCommandNumber ].operandaModifier << std::endl;
+                        if ( currentArgumentTemp.size() == 0 )
+                            {
+                            commandsArray [ currentCommand ].operandaModifier = -1;
+                            }
+                        else
+                            {
+                            argumentAnalyser( commandsArray, currentCommand, currentArgumentTemp );
+                            }
+                        
                         }
-                    
-                    std::cout << "DEBUG:" << commandsArray [ i ].operandaModifier << " " << currentCommandDescription << std::endl;
-                    machineCodeFile.writeString ( currentCommandDescription );
                     }
-
-/////--
-                
-                
-//                machineCodeFile.writeString ( std::to_string ( currentCommandId ) );
-                
-
-//                if ( currentCommandId > popS ) // popS, because after popS in our enum all commands need arguments;
-//                    {
-//                    machineCodeFile.writeString ( ( " " + ( humanCodeFile.getNextString() ) ) );
-//                    }
-                    
-//                machineCodeFile.writeNextChar ( '\n' );
-//                }
+            
+                }
+            
+            /*
+            for ( int i = 0; i < linesQuantity; i++ )
+                {
+                std::cout << commandsArray [ i ].commandId << " " << commandsArray [ i ].operandaModifier << " " << commandsArray [ i ].argumentS << " " << commandsArray [ i ].argumentS2 << std::endl;
+                }
+            */
+            
             
             return 0;
             }
-        
+            
+        std::string getWordInString ( std::string inputString, int mode ) // mode = 0 -> returns command; mode = 1 -> returns argument;
+            {
+            std::string result = "";
+            
+            if ( mode == 0 )
+                {
+                int currentChar = 0;
+                
+                while ( ( inputString [ currentChar ] != ' ' ) && ( inputString [ currentChar ] != '\n' ) && ( inputString [ currentChar ] != '\0' ) )
+                    {
+                    result = result + inputString [ currentChar ];
+                    currentChar++;
+                    }
+                    
+                return result;
+                }
+                
+            if ( mode == 1 )
+                {
+                int currentChar = 0;
+                
+                while ( ( inputString [ currentChar ] != ' ' ) && ( inputString [ currentChar ] != '\n' ) && ( inputString [ currentChar ] != '\0' ) )
+                    {
+                    currentChar++;
+                    }
+                    
+                if ( ( inputString [ currentChar ] != '\n' ) && ( inputString [ currentChar ] != '\0' ) )
+                    {
+                    
+                    while ( ( inputString [ currentChar ] != '\n' ) && ( inputString [ currentChar ] != '\0' ) )
+                        {
+                        result = result + inputString [ currentChar ];
+                        currentChar++;
+                        }
+                    
+                    return result;
+                    }
+                }
+                
+            return "";
+            }
+            
+        std::string getArgumentFromString ( std::string inputArgument, int mode ) // mode = 0 -> returns first argument; mode = 1 -> returns second argument ( if exists );
+            {
+            std::string result = "";
+            size_t inputArgumentLength = inputArgument.length();
+            
+            if ( mode == 0 )
+                {
+                for ( int currentChar = 1; currentChar < inputArgumentLength; currentChar++ )
+                    {
+                    if ( ( inputArgument [ currentChar ] != ']' ) && ( inputArgument [ currentChar ] != '+' ) && ( inputArgument [ currentChar ] != '-' ) )
+                        {
+                        result = result + inputArgument [ currentChar ];
+                        }
+                    else
+                        {
+                        break;
+                        }
+                    
+                    }
+                }
+            else
+                {
+                int currentChar = 0;
+                for ( currentChar = 1; currentChar < inputArgumentLength; currentChar++ )
+                    {
+                    if ( ( inputArgument [ currentChar ] == '+' ) || ( inputArgument [ currentChar ] == '-' ) )
+                        {
+                        currentChar++;
+                        break;
+                        }
+                    if ( inputArgument [ currentChar ] == ']' )
+                        {
+                        break;
+                        }
+                    }
+                    
+                
+                for ( int currentChar2 = currentChar; currentChar2 < inputArgumentLength; currentChar2++ )
+                    {
+                    if ( ( inputArgument [ currentChar2 ] != ']' ) && ( inputArgument [ currentChar2 ] != '+' ) && ( inputArgument [ currentChar2 ] != '-' ) )
+                        {
+                        result = result + inputArgument [ currentChar2 ];
+                        }
+                    else
+                        {
+                        break;
+                        }
+                    }
+                }
+            
+            return result;
+            }
+            
+        int argumentAnalyser ( command* commandsArray, int currentCommand, std::string currentArgumentTemp )
+            {
+//            std::cout << "HEEY: " << currentArgumentTemp << '\n';
+            int memoryShift = 0;
+            
+            if ( currentArgumentTemp [ 0 ] == '[' )
+                {
+                if ( isDigit ( currentArgumentTemp [ 1 ] ) )
+                    {
+                    commandsArray [ currentCommand ].operandaModifier = 0;
+                    commandsArray [ currentCommand ].argumentS = getArgumentFromString ( currentArgumentTemp, 0 );
+                    
+                    memoryShift = 3;
+                    }
+                else
+                    {
+                    if ( isLetter ( currentArgumentTemp [ 1 ] ) )
+                        {
+                        commandsArray [ currentCommand ].argumentS = getArgumentFromString ( currentArgumentTemp, 0 );
+                        ////////////////////////////////////////////////////////////////////////////////
+                        ////////////////////////////////////////////////////////////////////////////////
+                        std::string secondArgument = getArgumentFromString( currentArgumentTemp, 1 );
+                        if ( secondArgument.length() != 0 )
+                            {
+                            int tempMemoryShift = 0;
+                            
+                            if ( currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 1 ] == '-' )
+                                {
+                                tempMemoryShift = 2;
+                                }
+
+                            if ( isDigit ( currentArgumentTemp [ ( commandsArray [ currentCommand ].argumentS.length() + 2 ) ] ) )
+                                {
+                                commandsArray [ currentCommand ].operandaModifier = 2 + tempMemoryShift;
+                                }
+                            else
+                                {
+                                commandsArray [ currentCommand ].operandaModifier = 3 + tempMemoryShift;
+                                }
+                                 
+                            commandsArray [ currentCommand ].argumentS2 = secondArgument;
+                            }
+                        else
+                            {
+                            commandsArray [ currentCommand ].operandaModifier = 1;
+                            }
+                        }
+                    }
+                }
+            else
+                {
+                if ( isDigit ( currentArgumentTemp [ 0 ] ) )
+                    {
+                    commandsArray [ currentCommand ].operandaModifier = 6;
+                    commandsArray [ currentCommand ].argumentS = currentArgumentTemp;
+                    
+                    memoryShift = 3;
+                    }
+                else if ( isLetter ( currentArgumentTemp [ 0 ] ) )
+                    {
+                    commandsArray [ currentCommand ].operandaModifier = 7;
+                    commandsArray [ currentCommand ].argumentS = currentArgumentTemp;
+                    
+                    memoryShift = 3;
+                    }
+                }
+            
+            return memoryShift;
+            }
+            
+        std::string clearFromSpaces ( std::string currentArgumentTemp )
+            {
+            std::string result = "";
+            size_t argumentLength = currentArgumentTemp.size();
+            for ( int currentChar = 0; currentChar < argumentLength; currentChar++ )
+                {
+                if ( currentArgumentTemp [ currentChar ] != ' ' )
+                    {
+                    result = result + currentArgumentTemp [ currentChar ];
+                    }
+                }
+                
+            return result;
+            }
+
         
         //// ------------------------------------------------------------------------------------------------
         
         int getCommandId ( std::string tempCommand )
             {
-            printf ( "HERE WHAT I GET: %s\n", tempCommand.c_str() );
+//            printf ( "HERE WHAT I GET: %s\n", tempCommand.c_str() );
             if ( tempCommand == haultCommandHuman )
                 {                
                 return hlt;
@@ -232,6 +373,31 @@ class compiler
                 {                
                 return dump;
                 }
+            if ( tempCommand == jmpCommandHuman )
+                {
+                return jmp;
+                }
+            if ( tempCommand == jneCommandHuman )
+                {
+                return jne;
+                }
+            if ( tempCommand == jaCommandHuman )
+                {
+                return ja;
+                }
+            if ( tempCommand == jaeCommandHuman )
+                {
+                return jae;
+                }
+            if ( tempCommand == jbCommandHuman )
+                {
+                return jb;
+                }
+            if ( tempCommand == jbeCommandHuman )
+                {
+                return jbe;
+                }
+            
             
             return nullCommand;
             }
@@ -275,7 +441,7 @@ class compiler
                     { 
                     std::string tempStringForRegister = tempStringForRegister + preAnalysedArgument [ 1 ];
                     tempStringForRegister = tempStringForRegister + preAnalysedArgument [ 2 ];
-                    std::cout << "HEEY: " << preAnalysedArgument [ 1 ] << " " << preAnalysedArgument [ 2 ]  << std::endl;
+//1                    std::cout << "HEEY: " << preAnalysedArgument [ 1 ] << " " << preAnalysedArgument [ 2 ]  << std::endl;
                     
                     if ( preAnalysedArgument [ 3 ] == ']' )
                         {
@@ -351,7 +517,7 @@ class compiler
         int recogniseRegister ( std::string registerName )
             {
 //            printf ( "HERE WHAT I'VE GOT: %s\n", registerName.c_str() );
-            std::cout << std::endl << "II:" << registerName << std::endl;
+//1            std::cout << std::endl << "II:" << registerName << std::endl;
             if ( registerName == "ax" )
                 {
                 return ax;

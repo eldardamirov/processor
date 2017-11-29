@@ -71,6 +71,13 @@ const char* moduleCommandHuman = "abs";
 const char* duplicationCommandHuman = "dup";
 const char* dumpCommandHuman = "dump";
 
+const char* jmpCommandHuman = "jump";
+const char* jneCommandHuman = "jne";
+const char* jaCommandHuman = "ja";
+const char* jaeCommandHuman = "jae";
+const char* jbCommandHuman = "jb";
+const char* jbeCommandHuman = "jbe";
+
 //// ------------------------------------------------------------------------------------------------
 
 
