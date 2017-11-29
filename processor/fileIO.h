@@ -125,7 +125,7 @@ class readFromFile
 
         bool isEnd()
             {
-            return ( currentChar + 1 ) >= fileSize;
+            return ( currentChar + 1 ) >= fileSize; 
             }
             
         int calculateLinesQuantity()  // returns EXACT number of lines, including empty lines; OPTIONAL0

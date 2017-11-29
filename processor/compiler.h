@@ -83,6 +83,7 @@ class compiler
             
             while ( !humanCodeFile.isEnd() )
                 {
+                printf ( "\nYYYY\n" );
                 if ( flag != -1 )
                     {
                     currentCommand = humanCodeFile.getNextString();
@@ -115,25 +116,36 @@ class compiler
                 
                 for ( int i = 0; i < linesQuantity; i++ )   
                     {
-                    std::string currentCommandDescription =  ( ( std::to_string ( commandsArray [ i ].commandId ) ) + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) );
+                    std::string currentCommandDescription = ( std::to_string ( commandsArray [ i ].commandId ) );
                     if ( ( commandsArray [ i ].operandaModifier == 2 ) || ( commandsArray [ i ].operandaModifier == 4 ) )
                         {
-                        currentCommandDescription = currentCommandDescription + " " + std::to_string ( commandsArray [ i ].argument ) + " " + commandsArray [ i ].argumentS + "\n";
+                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + " " + commandsArray [ i ].argumentS + "\n";
                         }
                     else if ( ( commandsArray [ i ].operandaModifier == 3 ) || ( commandsArray [ i ].operandaModifier == 5 ) )
                         {
-                        currentCommandDescription = currentCommandDescription + " " + std::to_string ( commandsArray [ i ].argument ) + " " + std::to_string ( commandsArray [ i ].argument2 ) + "\n";
+                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + " " + std::to_string ( commandsArray [ i ].argument2 ) + "\n";
                         }
                     else if ( commandsArray [ i ].operandaModifier == 1 )
                         {
-                        currentCommandDescription = currentCommandDescription + " " + std::to_string ( commandsArray [ i ].argument ) + "\n";
+                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + "\n";
+//                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + ( commandsArray [ i ].argumentS ) + "\n";
                         }
                     else if ( commandsArray [ i ].operandaModifier == 0 )
                         {
-                        currentCommandDescription = currentCommandDescription + " " + commandsArray [ i ].argumentS + "\n";
+                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + commandsArray [ i ].argumentS + "\n";
+//                        currentCommandDescription = currentCommandDescription + " " + ( std::to_string ( commandsArray [ i ].operandaModifier ) ) + " " + std::to_string ( commandsArray [ i ].argument ) + "\n";
+                        }
+                    else
+                        {
+                        currentCommandDescription = currentCommandDescription + "\n";
                         }
                     
-                    std::cout << "DEBUG:" << currentCommandDescription << std::endl;
+                    if ( i == 1 )
+                        {
+                        std::cout << "\n\n\nBUUUGG: " << commandsArray [ currentCommandNumber ].commandId << " " << commandsArray [ currentCommandNumber ].operandaModifier << std::endl;
+                        }
+                    
+                    std::cout << "DEBUG:" << commandsArray [ i ].operandaModifier << " " << currentCommandDescription << std::endl;
                     machineCodeFile.writeString ( currentCommandDescription );
                     }
 
@@ -252,6 +264,7 @@ class compiler
                             }
                         }
                     
+                    commandsArray [ currentCommandNumber ].argumentS = tempStringForInt;
                     commandsArray [ currentCommandNumber ].operandaModifier = 0;
                     
                     
