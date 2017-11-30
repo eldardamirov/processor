@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string>
+#include <unordered_map>
 
 #include "fileIO.h"
 #include "commandsList.h"
@@ -60,6 +61,8 @@ class compiler
         //// ------------------------------------------------------------------------------------------------
         std::string humanCodeFileName = "", machineCodeFileName = "";
         //// ------------------------------------------------------------------------------------------------      
+        std::unordered_map <std::string, int> jumpMarks {};
+        
         
         command* makeMachineCode()
             {
@@ -90,17 +93,20 @@ class compiler
                 currentCommandIdTemp = getCommandId ( currentCommandTemp );
                 commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
                 
-//                std::cout << currentCommandIdTemp << "\n";
+                std::cout << currentCommandIdTemp << "\n";
                 
                 if ( ( currentCommandIdTemp < borderJump ) && ( currentCommandIdTemp != nullCommand ) )
                     {
                     commandInMemoryLocation++;
                     }
-                else
+                else if ( currentCommandIdTemp != nullCommand ) 
                     {
                     if ( currentCommandIdTemp < borderArgument )
                         {
                         // JUMPs HERE;
+                        commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
+                        commandsArray [ currentCommand ].operandaModifier = -2;
+                        commandsArray [ currentCommand ].argumentS = clearFromSpaces ( getWordInString ( currentInputLine, 1 ) );
                         }
                     else
                         {
@@ -109,13 +115,21 @@ class compiler
                         if ( currentArgumentTemp.size() == 0 )
                             {
                             commandsArray [ currentCommand ].operandaModifier = -1;
+                            commandInMemoryLocation = commandInMemoryLocation + 2;
                             }
                         else
                             {
-                            argumentAnalyser( commandsArray, currentCommand, currentArgumentTemp );
+                            commandInMemoryLocation = commandInMemoryLocation + argumentAnalyser( commandsArray, currentCommand, currentArgumentTemp );
                             }
                         
                         }
+                    }
+                else
+                    {
+                    std::cout << "\nGGG:" << currentInputLine << " " << currentCommandIdTemp << "\n";
+                    commandsArray [ currentCommand ].operandaModifier = -3;
+                    commandsArray [ currentCommand ].argumentS = currentInputLine;
+                    jumpMarks [ currentInputLine ] = commandInMemoryLocation;
                     }
             
                 }
@@ -127,7 +141,20 @@ class compiler
                 }
             */
             
+            /// -- PASSING JUMPS MEMORY LOCATIONS 
+            
+            for ( int i = 0; i < linesQuantity; i++ )
+                {
+                if ( commandsArray [ i ].operandaModifier == -2 )
+                    {
+                    commandsArray [ i ].argument = jumpMarks [ commandsArray [ i ].argumentS ];
+                    }
+                }
+            
+            ////
+            
             std::string lineToWrite = "";
+            std::cout << commandsArray [ 1 ].commandId << " " << commandsArray [ 1 ].operandaModifier << " " << commandsArray [ 1 ].argumentS << " " << commandsArray [ 1 ].argumentS2 << " " << commandsArray [ 1 ].argument << " " << commandsArray [ 1 ].argument2 << "\n";
             
             for ( int currentLine = 0; currentLine < linesQuantity; currentLine++ ) 
                 {
@@ -140,7 +167,7 @@ class compiler
                 if ( commandState == 0 )
                     {
 //                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
-                    std::string temp = commandsArray [ currentLine ].argumentS;  // !!!!
+                    std::string temp = commandsArray [ currentLine ].argumentS; // !!!!
                     lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + temp + "\n";
                     }
                 if ( commandState == 1 )
@@ -149,7 +176,7 @@ class compiler
                     }
                 if ( commandState == 2 )
                     {
-                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + commandsArray [ currentLine ].argumentS2 + "\n"; // !!!!
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + " " + commandsArray [ currentLine ].argumentS2 + "\n"; // !!!!
                     }
                 if ( commandState == 3 )
                     {
@@ -157,7 +184,7 @@ class compiler
                     }
                 if ( commandState == 4 )
                     {
-                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + commandsArray [ currentLine ].argumentS2 + "\n"; // !!!!
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + " " + commandsArray [ currentLine ].argumentS2 + "\n"; // !!!!
                     }
                 if ( commandState == 5 )
                     {
@@ -170,6 +197,15 @@ class compiler
                 if ( commandState == 7 )
                     {
                     lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + "\n"; 
+                    }
+                if ( commandState == -2 )
+                    {
+                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + "\n";
+                    }
+                if ( commandState == -3 )
+                    {
+                    std::string temp = commandsArray [ currentLine ].argumentS;
+                    lineToWrite = temp + "\n";
                     }
                     
                 machineCodeFile.writeString ( lineToWrite );
@@ -301,7 +337,7 @@ class compiler
                         if ( secondArgument.length() != 0 )
                             {
                             int tempShift = 0;
-                            std::cout << currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ];
+//                            std::cout << currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ];
                             if ( currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ] == '-' )
                                 {
                                 tempShift = 2;
@@ -315,7 +351,7 @@ class compiler
                             else
                                 {
                                 commandsArray [ currentCommand ].operandaModifier = 3 + tempShift;
-                                    printf ( "%s", secondArgument.c_str() );
+//                                    printf ( "%s", secondArgument.c_str() );
                                 commandsArray [ currentCommand ].argument2 = recogniseRegister ( secondArgument );
                                 }
                             
