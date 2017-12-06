@@ -68,7 +68,7 @@ class compiler
             {
             //// ------------------------------------------------------------------------------------------------
             readFromFile humanCodeFile ( "humanCode.txt" );
-            writeToFile machineCodeFile ( "machineCode.txt", ( humanCodeFile.getFileSize() + 1 ) );
+            writeToFile machineCodeFile ( "machineCode.txt", ( humanCodeFile.getFileSize() * 4 ) );
             
             int linesQuantity = humanCodeFile.calculateLinesQuantity();
             
@@ -148,8 +148,10 @@ class compiler
                 if ( commandsArray [ i ].operandaModifier == -2 )
                     {
                     commandsArray [ i ].argument = jumpMarks [ commandsArray [ i ].argumentS ];
+                    printf ( "\nJUMP: %f\n", commandsArray [ i ].argument );
                     }
                 }
+
             
             ////
             
@@ -166,7 +168,6 @@ class compiler
                     }
                 if ( commandState == 0 )
                     {
-//                    lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + commandsArray [ currentLine ].argumentS + "\n";
                     std::string temp = commandsArray [ currentLine ].argumentS; // !!!!
                     lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].operandaModifier ) + " " + temp + "\n";
                     }
@@ -331,13 +332,11 @@ class compiler
                     if ( isLetter ( currentArgumentTemp [ 1 ] ) )
                         {
                         commandsArray [ currentCommand ].argument = recogniseRegister ( getArgumentFromString ( currentArgumentTemp, 0 ) );
-                        ////////////////////////////////////////////////////////////////////////////////
-                        ////////////////////////////////////////////////////////////////////////////////
+
                         std::string secondArgument = getArgumentFromString( currentArgumentTemp, 1 );
                         if ( secondArgument.length() != 0 )
                             {
                             int tempShift = 0;
-//                            std::cout << currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ];
                             if ( currentArgumentTemp [ commandsArray [ currentCommand ].argumentS.length() + 3 ] == '-' )
                                 {
                                 tempShift = 2;
@@ -351,7 +350,7 @@ class compiler
                             else
                                 {
                                 commandsArray [ currentCommand ].operandaModifier = 3 + tempShift;
-//                                    printf ( "%s", secondArgument.c_str() );
+
                                 commandsArray [ currentCommand ].argument2 = recogniseRegister ( secondArgument );
                                 }
                             
@@ -502,7 +501,7 @@ class compiler
         int recogniseRegister ( std::string registerName )
             {
 //            printf ( "HERE WHAT I'VE GOT: %s\n", registerName.c_str() );
-//1            std::cout << std::endl << "II:" << registerName << std::endl;
+
             if ( registerName == "ax" )
                 {
                 return ax;

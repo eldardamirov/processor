@@ -23,6 +23,24 @@
 //    };
 
 
+//enum commands
+//    {
+//    hlt, nullCommand,
+//    in, out,
+//    add, sub, mul, myDiv, // 7
+//    mySin, myCos, mySqrt, myAbs, // 11
+//    myDup, dump,
+//    borderJump,
+//    jmp, jne, ja, jae, jb, jbe, 
+//    borderArgument,
+//    pushR, popR, 
+//    pop, // 24
+//    pushS, popS,
+//    pushRAM, popRAM, 
+//    push // 29
+//    };
+
+
 enum commands
     {
     hlt, nullCommand,
@@ -31,7 +49,7 @@ enum commands
     mySin, myCos, mySqrt, myAbs, // 11
     myDup, dump,
     borderJump,
-    jmp, jne, ja, jae, jb, jbe,
+    jmp, jne, ja, jae, jb, jbe, 
     borderArgument,
     pushR, popR, 
     pop, // 24

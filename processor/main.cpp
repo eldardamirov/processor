@@ -41,11 +41,10 @@ class Processor
                 {
                 currentCommandId = std::stoi ( machineCode.getNextString() );
                 
-//                if ( currentCommandId > border )
-//                    {
-//                    argument = machineCode.getNextString();
-//
-//                    }
+                if ( currentCommandId > borderJump )
+                    {
+                    argument = machineCode.getNextString();
+                    }
                     
                 if ( doCommand ( currentCommandId, argument ) == -2 )
                     {
@@ -119,8 +118,10 @@ class Processor
                     stackDump();
                     return 0;
                 case pop:
-                    stackPopS();
+                    {
+                    
                     return 0;
+                    }
                 case popR:
                     stackPopR ();
                     return 0;
