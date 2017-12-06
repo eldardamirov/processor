@@ -16,7 +16,7 @@
 #include "compiler.h"
 
 
-
+const int instructionsArraySize = 64; // OMG, WHAT IS IT? CAN YOU DO SOMETHING AT LEAST NORMAL?
 
 
 
@@ -25,11 +25,30 @@ class Processor
     public:
         Processor() : processorStack ( Stack <double> ( 256, LOW ) )
             {
-            
+            makeInstructionStack();
+            controlCommandsDoing();
             }
-    
+            
+            
+            
+        int controlCommandsDoing()
+             {
+             for ( currentMemoryCell; currentMemoryCell < instructionsArraySize; currentMemoryCell++ )
+                 {
+                 
+                 }
+             
+             
+             
+             
+             return 0;
+             }
+        
+            
+        /*
         int boss()
             {
+            
             readFromFile machineCode ( "machineCode.txt" );
             
             int currentCommandId = 0;
@@ -56,16 +75,17 @@ class Processor
                 
                 argument = "";
                 }
-                
+               
             
             return 0;
             }
-        
+        */
     
     private:
         Stack <double> processorStack;
+        double* instructionsArray = new double [ instructionsArraySize ];   // MAKE SOMETHING NORMAL HERE, PLEASE;
         double* myRegister = new double [ 1024 ];
-        int currentFreeRegisterId = 0;
+        int currentMemoryCell = 0;
         
         
         // REGISTERS
@@ -74,63 +94,82 @@ class Processor
         double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
         
         
-        int doCommand ( int commandId, std::string argument )
+        
+        
+        int makeInstructionStack()
+            {
+            readFromFile machineCode ( "machineCode.txt" );
+            size_t machineCodeLinesQuantity = machineCode.calculateLinesQuantity();
+            
+            for ( int currentCell = 0; currentCell < machineCodeLinesQuantity; currentCell++ )
+                {
+                instructionsArray [ currentCell ] = std::stod ( machineCode.getNextString() );
+                }
+                
+            return 0;
+            }
+            
+            
+        
+        
+        int doCommand () 
             {
 //            printf ( "\nNow I'm doing command with id %d and argument %s\n", commandId, argument.c_str() );
+            
+            int commandId = instructionsArray [ currentMemoryCell ];
+//            int operandaModifier = instructionsArray [ currentMemoryCell + 1 ]; //  IMPORTANT: note that operandaModifier current function variable may not contain real command operandaModifier;
             
             switch ( commandId )
                 {
                 case hlt:
-                    return -2; // stop;
+                    return 2; // stop;
                 case nullCommand:
-                    return -1; // some error occured;
+                    return nullCommand; // some error occured;
                 case out:
                     stackOut();
-                    return 0;
+                    return 2;
                 case add:
                     stackAdd();
-                    return 0;
+                    return 2;
                 case sub:
                     stackSub();
-                    return 0;
+                    return 2;
                 case mul:
                     stackMul();
-                    return 0;
+                    return 2;
                 case myDiv:
                     stackDiv();
-                    return 0;
+                    return 2;
                 case mySin:
                     stackSin();
-                    return 0;
+                    return 2;
                 case myCos:
                     stackCos();
-                    return 0;
+                    return 2;
                 case mySqrt:
                     stackSqrt();
-                    return 0;
+                    return 2;
                 case myAbs:
                     stackAbs();
-                    return 0;
+                    return 2;
                 case myDup:
                     stackDup();
-                    return 0;
+                    return 2;
                 case dump:
                     stackDump();
-                    return 0;
+                    return 2;
                 case pop:
                     {
+                    int operandaModifier = instructionsArray [ currentMemoryCell + 1 ];
                     
-                    return 0;
+                    return pop ( operandaModifier );
                     }
-                case popR:
-                    stackPopR ();
-                    return 0;
                 case push:
-                    stackPushS ( argument );
-                    return 0;
-                case pushR:
-                    stackPushR ( argument );
-                    return 0;
+                    {
+                    int operandaModifier = instructionsArray [ currentMemoryCell + 1 ];
+                    
+                    return push ( operandaModifier );
+                    }
                 case in:
                     stackIn();
                     return 0;

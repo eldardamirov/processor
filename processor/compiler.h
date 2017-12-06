@@ -217,7 +217,7 @@ class compiler
                     }
                 }
                 
-                
+            /*    
             ////-------
             std::cout << "JUMP ..... ///////////////\n";
             for ( int y = 0; y < 9; y++ )
@@ -226,6 +226,7 @@ class compiler
                 }
             std::cout << "\nJUMP ..... ///////////////\n";
             ////------
+            */
 
             
             ////
@@ -278,10 +279,10 @@ class compiler
                     {
                     lineToWrite = std::to_string ( commandsArray [ currentLine ].commandId ) + " " + std::to_string ( commandsArray [ currentLine ].argument ) + "\n";
                     }
-                if ( commandState == -3 )
+                if ( commandState == -3 ) // jump mark;
                     {
-                    std::string temp = commandsArray [ currentLine ].argumentS;
-                    lineToWrite = temp + "\n";
+//                    std::string temp = commandsArray [ currentLine ].argumentS;
+//                    lineToWrite = temp + "\n";
                     }
                     
                 machineCodeFile.writeString ( lineToWrite );

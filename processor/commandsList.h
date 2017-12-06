@@ -66,6 +66,16 @@ enum registers
     };
 
 
+enum argumentTypes
+    {
+    empty = -1, 
+    numberRAM, registerRAM,
+    numberRegisterAddRAM, register2AddRAM,
+    numberRegisterSubRAM, register2SubRAM,
+    myNumber, myRegister
+    };
+
+
 //// ------------------------------------------------------------------------------------------------
 
 const char* haultCommandHuman = "hlt";
