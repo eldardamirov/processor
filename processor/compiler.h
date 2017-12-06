@@ -73,7 +73,7 @@ class compiler
             int linesQuantity = humanCodeFile.calculateLinesQuantity();
             
             command* commandsArray = new command [ linesQuantity ];
-            int commandInMemoryLocation = 0;
+            int commandInMemoryLocation = -1;
             
             std::string currentInputLine = "";
             
@@ -83,6 +83,14 @@ class compiler
             int currentCommandIdTemp = 0;
             //// ------------------------------------------------------------------------------------------------
             
+            //////------DEBUG
+            
+            int debug [ 128 ] = {};
+            int g = 0;
+            
+            //////----------
+            
+            
             
             for ( int currentCommand = 0; currentCommand < linesQuantity; currentCommand++ )
                 {
@@ -91,22 +99,44 @@ class compiler
                 
                 
                 currentCommandIdTemp = getCommandId ( currentCommandTemp );
+                                    printf ( "\n%d\n", currentCommandIdTemp );
+
                 commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
                 
-                std::cout << currentCommandIdTemp << "\n";
+//                std::cout << currentCommandIdTemp << "\n";
+                
                 
                 if ( ( currentCommandIdTemp < borderJump ) && ( currentCommandIdTemp != nullCommand ) )
                     {
-                    commandInMemoryLocation++;
+                    commandInMemoryLocation = commandInMemoryLocation + 2;
+//                    commandInMemoryLocation++;
+                    
+                    //------DEBUG-----\\\
+                    
+                    debug [ g ] = commandInMemoryLocation;
+                    g++;
+                    //-----------------\\
+                    
                     }
                 else if ( currentCommandIdTemp != nullCommand ) 
                     {
+//                    printf ( "\n%d\n", currentCommandIdTemp );
                     if ( currentCommandIdTemp < borderArgument )
                         {
                         // JUMPs HERE;
+                        printf ( "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n" );
                         commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
                         commandsArray [ currentCommand ].operandaModifier = -2;
                         commandsArray [ currentCommand ].argumentS = clearFromSpaces ( getWordInString ( currentInputLine, 1 ) );
+                        
+                        commandInMemoryLocation = commandInMemoryLocation + 2;
+                        
+                        //------DEBUG-----
+                    
+                        debug [ g ] = commandInMemoryLocation;
+                        g++;
+                        //-----------------
+                        
                         }
                     else
                         {
@@ -115,21 +145,56 @@ class compiler
                         if ( currentArgumentTemp.size() == 0 )
                             {
                             commandsArray [ currentCommand ].operandaModifier = -1;
-                            commandInMemoryLocation = commandInMemoryLocation + 2;
+                            commandInMemoryLocation = commandInMemoryLocation + 2;   //////////////////////////////////////// "+ 2"
+                            
+                            //------DEBUG-----
+                    
+                            debug [ g ] = commandInMemoryLocation;
+                            g++;
+                            //-----------------
                             }
                         else
                             {
                             commandInMemoryLocation = commandInMemoryLocation + argumentAnalyser( commandsArray, currentCommand, currentArgumentTemp );
+                            
+                            //------DEBUG-----
+                    
+                            debug [ g ] = commandInMemoryLocation;
+                            g++;
+                            //-----------------
+                            
                             }
                         
                         }
                     }
                 else
                     {
-                    std::cout << "\nGGG:" << currentInputLine << " " << currentCommandIdTemp << "\n";
+//                    std::cout << "\nGGG:" << currentInputLine << " " << currentCommandIdTemp << "\n";
+                    /*
+
                     commandsArray [ currentCommand ].operandaModifier = -3;
                     commandsArray [ currentCommand ].argumentS = currentInputLine;
                     jumpMarks [ currentInputLine ] = commandInMemoryLocation;
+                    
+                    */
+                    
+                    printf ( "GGGG: ''%s''\n", currentCommandTemp.c_str() );
+                    
+                    if ( currentCommandTemp == jmpCommandHuman )
+                        {
+                        printf ( "TTTT\n" );
+                        commandsArray [ currentCommand ].operandaModifier = -2;
+                        commandsArray [ currentCommand ].commandId = jmp;
+                        commandsArray [ currentCommand ].argumentS = getWordInString ( currentInputLine, 1 );  
+                        }
+                    else
+                        {
+                        commandsArray [ currentCommand ].operandaModifier = -3;
+                        commandsArray [ currentCommand ].argumentS = currentInputLine;
+                        jumpMarks [ currentInputLine ] = commandInMemoryLocation;
+                        }
+                    
+                    
                     }
             
                 }
@@ -151,12 +216,22 @@ class compiler
                     printf ( "\nJUMP: %f\n", commandsArray [ i ].argument );
                     }
                 }
+                
+                
+            ////-------
+            std::cout << "JUMP ..... ///////////////\n";
+            for ( int y = 0; y < 9; y++ )
+                {
+                std::cout << " " << debug [ y ] << " COMMAND MODIFIER " << commandsArray [ y ].operandaModifier << "\n";
+                }
+            std::cout << "\nJUMP ..... ///////////////\n";
+            ////------
 
             
             ////
             
             std::string lineToWrite = "";
-            std::cout << commandsArray [ 1 ].commandId << " " << commandsArray [ 1 ].operandaModifier << " " << commandsArray [ 1 ].argumentS << " " << commandsArray [ 1 ].argumentS2 << " " << commandsArray [ 1 ].argument << " " << commandsArray [ 1 ].argument2 << "\n";
+//            std::cout << commandsArray [ 1 ].commandId << " " << commandsArray [ 1 ].operandaModifier << " " << commandsArray [ 1 ].argumentS << " " << commandsArray [ 1 ].argumentS2 << " " << commandsArray [ 1 ].argument << " " << commandsArray [ 1 ].argument2 << "\n";
             
             for ( int currentLine = 0; currentLine < linesQuantity; currentLine++ ) 
                 {
