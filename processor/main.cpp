@@ -20,6 +20,8 @@ const int instructionsArraySize = 64; // OMG, WHAT IS IT? CAN YOU DO SOMETHING A
 
 
 
+
+
 class Processor
     {
     public:
@@ -84,14 +86,15 @@ class Processor
     private:
         Stack <double> processorStack;
         double* instructionsArray = new double [ instructionsArraySize ];   // MAKE SOMETHING NORMAL HERE, PLEASE;
-        double* myRegister = new double [ 1024 ];
+        double* ram = new double [ 1024 ];
         int currentMemoryCell = 0;
         
         
         // REGISTERS
-        double ax = 0.0, bx = 0.0, cx = 0.0, dx = 0.0;
-        double n1 = 0.0, n2 = 0.0, nS = 0.0;
-        double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
+        double* registerArray = new double [ registerQuantity ];
+//        double ax = 0.0, bx = 0.0, cx = 0.0, dx = 0.0;
+//        double n1 = 0.0, n2 = 0.0, nS = 0.0;
+//        double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
         
         
         
@@ -162,13 +165,14 @@ class Processor
                     {
                     int operandaModifier = instructionsArray [ currentMemoryCell + 1 ];
                     
-                    return pop ( operandaModifier );
+                    return popMe ( operandaModifier );
+//                    return 0;
                     }
                 case push:
                     {
                     int operandaModifier = instructionsArray [ currentMemoryCell + 1 ];
                     
-                    return push ( operandaModifier );
+                    return pushMe ( operandaModifier );
                     }
                 case in:
                     stackIn();
@@ -177,6 +181,126 @@ class Processor
                     return -7;
                 }
             return 0;
+            }
+            
+        int pushMe ( int operandaModifier )
+            {
+            if ( operandaModifier == 0 )
+                {
+                processorStack.push ( ram [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] );
+                return 0;
+                }
+            
+            if ( operandaModifier == 1 )
+                {
+                processorStack.push ( ram [ ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] ] );
+                return 0;
+                }
+            
+            if ( operandaModifier == 2 )
+                {
+                processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] );
+                return 0;
+                }
+            
+            if ( operandaModifier == 3 )
+                {
+                processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] );
+                return 0;
+                }
+            
+            if ( operandaModifier == 4 )
+                {
+                processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] );
+                return 0;
+                }
+                
+            if ( operandaModifier == 5 )
+                {
+                processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] );
+                return 0;
+                }
+                
+            if ( operandaModifier == 6 )
+                {
+                processorStack.push ( instructionsArray [ currentMemoryCell + 2 ] );
+                return 0;
+                }
+            
+            if ( operandaModifier == 7 )
+                {
+                processorStack.push ( registerArray [ ( int ) instructionsArray [ ( int ) currentMemoryCell + 2 ] ] );
+                return 0;
+                }
+            
+            return -1;
+            }
+            
+        int popMe ( int operandaModifier )
+            {
+            if ( operandaModifier == 0 )
+                {
+                ram [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] = *processorStack.top();
+                processorStack.pop();
+                
+                return 0;
+                }
+            
+            if ( operandaModifier == 1 )
+                {
+                ram [ ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] ] = *processorStack.top();
+                processorStack.pop();
+                
+                return 0;
+                }
+            
+            if ( operandaModifier == 2 )
+                {
+                ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] = *processorStack.top();
+                processorStack.pop();
+                
+                return 0;
+                }
+            
+            if ( operandaModifier == 3 )
+                {
+                ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] = *processorStack.top();
+                processorStack.pop();
+                
+                return 0;
+                }
+            
+            if ( operandaModifier == 4 )
+                {
+                ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] = *processorStack.top();
+                return 0;
+                }
+                
+            if ( operandaModifier == 5 )
+                {
+                ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] = *processorStack.top();
+                processorStack.pop();
+                
+                return 0;
+                }
+                
+            if ( operandaModifier == -1 )
+                {
+                processorStack.pop();
+                
+                return 0;
+                }
+            
+            if ( operandaModifier == 7 )
+                {
+                registerArray [ ax ] = *processorStack.top();
+                processorStack.pop();
+                
+                return 0;
+                }
+                
+
+            return -1;
             }
             
         int stackOut()
@@ -303,29 +427,8 @@ class Processor
             
             return 0;
             }
-            
-        int stackPopR()
-            {
-            myRegister [ currentFreeRegisterId ] = *processorStack.top();
-            processorStack.pop();
-            
-            return 0;
-            }
-        
-        int stackPushS ( std::string argument )
-            {
-            double temp = std::stod ( argument ); 
-            processorStack.push ( temp );
-            
-            return 0;
-            }
-            
-        int stackPushR ( std::string argument ) 
-            {
-            processorStack.push ( myRegister [ std::stoi ( argument ) ] );
-            
-            return 0;
-            }
+
+    
             
         int stackIn()
             {
@@ -341,10 +444,12 @@ class Processor
 
     
     };
-
-
+    
 
 /*
+
+
+
 
 int main()
     {

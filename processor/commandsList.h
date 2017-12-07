@@ -58,6 +58,9 @@ enum commands
     push // 29
     };
     
+    
+const int registerQuantity = 11;
+    
 enum registers
     {
     ax, bx, cx, dx,
