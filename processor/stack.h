@@ -127,7 +127,7 @@ template <typename typeOfData> class Stack
             
         size_t size()
             {
-            return stackCurrentSize;
+            return stackCurrentElement;
             }
         
         

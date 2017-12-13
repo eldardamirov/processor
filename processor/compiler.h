@@ -99,7 +99,7 @@ class compiler
                 
                 
                 currentCommandIdTemp = getCommandId ( currentCommandTemp );
-                                    printf ( "\n%d\n", currentCommandIdTemp );
+//                                    printf ( "\n%d\n", currentCommandIdTemp );
 
                 commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
                 
@@ -124,7 +124,7 @@ class compiler
                     if ( currentCommandIdTemp < borderArgument )
                         {
                         // JUMPs HERE;
-                        printf ( "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n" );
+//                        printf ( "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n" );
                         commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
                         commandsArray [ currentCommand ].operandaModifier = -2;
                         commandsArray [ currentCommand ].argumentS = clearFromSpaces ( getWordInString ( currentInputLine, 1 ) );
@@ -178,11 +178,11 @@ class compiler
                     
                     */
                     
-                    printf ( "GGGG: ''%s''\n", currentCommandTemp.c_str() );
+//                    printf ( "GGGG: ''%s''\n", currentCommandTemp.c_str() );
                     
                     if ( currentCommandTemp == jmpCommandHuman )
                         {
-                        printf ( "TTTT\n" );
+//                        printf ( "TTTT\n" );
                         commandsArray [ currentCommand ].operandaModifier = -2;
                         commandsArray [ currentCommand ].commandId = jmp;
                         commandsArray [ currentCommand ].argumentS = getWordInString ( currentInputLine, 1 );  
@@ -213,7 +213,7 @@ class compiler
                 if ( commandsArray [ i ].operandaModifier == -2 )
                     {
                     commandsArray [ i ].argument = jumpMarks [ commandsArray [ i ].argumentS ];
-                    printf ( "\nJUMP: %f\n", commandsArray [ i ].argument );
+//                    printf ( "\nJUMP: %f\n", commandsArray [ i ].argument );
                     }
                 }
                 

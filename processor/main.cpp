@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cmath>
+#include <string>
 
 
 #include "fileIO.h"
@@ -28,6 +29,7 @@ class Processor
         Processor() : processorStack ( Stack <double> ( 256, LOW ) )
             {
             makeInstructionStack();
+            printItAll();
             controlCommandsDoing();
             }
             
@@ -35,16 +37,36 @@ class Processor
             
         int controlCommandsDoing()
              {
-             for ( currentMemoryCell; currentMemoryCell < instructionsArraySize; currentMemoryCell++ )
+             std::cout << "HEY: " << currentMemoryCell << " " << instructionsArraySize << std::endl;
+//             for ( currentMemoryCell; currentMemoryCell < instructionsArraySize; currentMemoryCell++ )
+             for ( int i = 0; i < instructionsArraySize; i++ )
                  {
-                 
+                 doCommand();
                  }
-             
-             
-             
              
              return 0;
              }
+             
+             
+         //////////////////////////////
+        //////////////////////////////
+        //////////////////////////////
+            
+        void printItAll()
+            {
+            std::cout << "I was here\n";
+            for ( int i = 0; i < commandsQuantity * 2; i++ )
+                {
+                std::cout << instructionsArray [ i ] << std::endl;
+                }
+            
+            }
+            
+        
+        
+        //////////////////////////////
+        //////////////////////////////
+        //////////////////////////////
         
             
         /*
@@ -85,13 +107,20 @@ class Processor
     
     private:
         Stack <double> processorStack;
-        double* instructionsArray = new double [ instructionsArraySize ];   // MAKE SOMETHING NORMAL HERE, PLEASE;
-        double* ram = new double [ 1024 ];
+        double* instructionsArray = new double [ instructionsArraySize ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
+        double* ram = new double [ 1024 ] {};
+        size_t commandsQuantity = 0;
         int currentMemoryCell = 0;
         
         
         // REGISTERS
-        double* registerArray = new double [ registerQuantity ];
+        double* registerArray = new double [ registerQuantity ] {};
+        
+        /// init, SHOULD BE IN SEPERATE FUNCTION;
+        
+        
+        ///
+        
 //        double ax = 0.0, bx = 0.0, cx = 0.0, dx = 0.0;
 //        double n1 = 0.0, n2 = 0.0, nS = 0.0;
 //        double r1 = 0.0, r2 = 0.0, r3 = 0.0, r4 = 0.0;
@@ -102,23 +131,45 @@ class Processor
         int makeInstructionStack()
             {
             readFromFile machineCode ( "machineCode.txt" );
-            size_t machineCodeLinesQuantity = machineCode.calculateLinesQuantity();
+            commandsQuantity = machineCode.calculateLinesQuantity();
             
-            for ( int currentCell = 0; currentCell < machineCodeLinesQuantity; currentCell++ )
+            
+            for ( int currentCell = 0; currentCell < 36; currentCell++ )
                 {
-                instructionsArray [ currentCell ] = std::stod ( machineCode.getNextString() );
+                if ( !machineCode.isEnd() )
+                    {
+                    std::string temp = machineCode.getNextString();
+//                    std::cout << temp << std::endl;
+                    if ( temp != "" )
+                        {
+                        instructionsArray [ currentCell ] = std::stod ( temp );
+                        printf ( "DEBUG2A: %s\n", temp.c_str() );
+                        }
+                    }
                 }
+            
+            /*
+            int currentCell = 0;
+            while ( !machineCode.isEnd() )
+                {
+                std::string temp = machineCode.getNextString();
+                if ( temp != "" )
+                    {
+                    instructionsArray [ currentCell ] = std::stod ( temp );
+                    }
+                currentCell++;
+                }
+            */
                 
             return 0;
             }
-            
             
         
         
         int doCommand () 
             {
 //            printf ( "\nNow I'm doing command with id %d and argument %s\n", commandId, argument.c_str() );
-            
+            std::cout << "Current memory cell: " << currentMemoryCell << "\n";
             int commandId = instructionsArray [ currentMemoryCell ];
 //            int operandaModifier = instructionsArray [ currentMemoryCell + 1 ]; //  IMPORTANT: note that operandaModifier current function variable may not contain real command operandaModifier;
             
@@ -166,7 +217,6 @@ class Processor
                     int operandaModifier = instructionsArray [ currentMemoryCell + 1 ];
                     
                     return popMe ( operandaModifier );
-//                    return 0;
                     }
                 case push:
                     {
@@ -175,8 +225,15 @@ class Processor
                     return pushMe ( operandaModifier );
                     }
                 case in:
+                    {
                     stackIn();
                     return 0;
+                    }
+                case jmp:
+                    {
+//                    int cellAdress = instructionsArray [ currentMemoryCell + 1 ];  
+                    currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                    }
                 default:
                     return -7;
                 }
@@ -188,50 +245,69 @@ class Processor
             if ( operandaModifier == 0 )
                 {
                 processorStack.push ( ram [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] );
+                
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
             
             if ( operandaModifier == 1 )
                 {
                 processorStack.push ( ram [ ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] ] );
+                
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
             
             if ( operandaModifier == 2 )
                 {
                 processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] );
+                
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
             
             if ( operandaModifier == 3 )
                 {
                 processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] );
+                
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
             
             if ( operandaModifier == 4 )
                 {
                 processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] );
+                
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
                 
             if ( operandaModifier == 5 )
                 {
                 processorStack.push ( ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] );
+                
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
                 
             if ( operandaModifier == 6 )
                 {
                 processorStack.push ( instructionsArray [ currentMemoryCell + 2 ] );
+                
+                std::cout << "DEBUG: " << *processorStack.top() << " AND SIZE IS: " << processorStack.size() << std::endl;
+                
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
             
             if ( operandaModifier == 7 )
                 {
                 processorStack.push ( registerArray [ ( int ) instructionsArray [ ( int ) currentMemoryCell + 2 ] ] );
+                
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
+            
             
             return -1;
             }
@@ -240,9 +316,11 @@ class Processor
             {
             if ( operandaModifier == 0 )
                 {
+                int temp = ( int ) instructionsArray [ currentMemoryCell + 2 ];
                 ram [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] = *processorStack.top();
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
             
@@ -251,6 +329,7 @@ class Processor
                 ram [ ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] ] = *processorStack.top();
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
             
@@ -259,6 +338,7 @@ class Processor
                 ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] = *processorStack.top();
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
             
@@ -267,12 +347,15 @@ class Processor
                 ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] + ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] = *processorStack.top();
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
             
             if ( operandaModifier == 4 )
                 {
                 ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) instructionsArray [ currentMemoryCell + 3 ] ) ] = *processorStack.top();
+                
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
                 
@@ -281,6 +364,7 @@ class Processor
                 ram [ ( int ) ( ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] - ( int ) registerArray [ ( int ) instructionsArray [ currentMemoryCell + 3 ] ] ) ] = *processorStack.top();
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 4;
                 return 0;
                 }
                 
@@ -288,6 +372,7 @@ class Processor
                 {
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 2;
                 return 0;
                 }
             
@@ -296,6 +381,7 @@ class Processor
                 registerArray [ ax ] = *processorStack.top();
                 processorStack.pop();
                 
+                currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
                 
@@ -305,9 +391,12 @@ class Processor
             
         int stackOut()
             {
-//            printf ( "%f\n", *processorStack.top() );
+            printf ( "AAA: %f\n", *processorStack.top() );
+//            std::cout << ( double ) *processorStack.top();
+
             processorStack.pop();
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -315,12 +404,24 @@ class Processor
             {
             double temp = 0;
             
+//            std::cout << "I've pushed: " << temp << std::endl;
+            
+            std::cout << ">>>>>>>>>>>>>>>>>> DUMP <<<<<<<<<<<<<<<<<<<<\n";
+            std::cout << processorStack.size() << "\n";
+            std::cout << ">>>>>>>>>>>>>>>>>> DUMP <<<<<<<<<<<<<<<<<<<<\n";
+            
             temp = temp + *processorStack.top();
+//            std::cout << "I've pushed: " << temp << std::endl;
             processorStack.pop();
             temp = temp + *processorStack.top();
+//            std::cout << "AHA!: " << *processorStack.top() << std::endl;
             processorStack.pop();
             processorStack.push ( temp );
             
+//            std::cout << "I've pushed: " << temp << std::endl;
+
+            
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -334,6 +435,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( temp );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -347,6 +449,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( temp );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -360,6 +463,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( temp );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -371,6 +475,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( sin ( temp ) );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -382,6 +487,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( cos ( temp ) );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -393,6 +499,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( sqrt ( temp ) );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -404,6 +511,7 @@ class Processor
             processorStack.pop();
             processorStack.push ( abs ( temp ) );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -411,6 +519,7 @@ class Processor
             {
             processorStack.push ( *processorStack.top() );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -418,6 +527,7 @@ class Processor
             {
 //            processorStack.dump();
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
             
@@ -437,12 +547,10 @@ class Processor
             
             processorStack.push ( temp );
             
+            currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
         
-            
-
-    
     };
     
 
@@ -464,16 +572,38 @@ int main()
 
 */
 
+/*
+int main()
+    {
+    Stack <double> myStack ( 0, LOW );
+    myStack.push ( 10 );
+    myStack.pop();
+    myStack.push ( 15 );
+    myStack.size();
+    
+    std::cout << myStack.size();
+//    printf ( "%f\n", *myStack.top() );
+
+    return 0;
+    }
+
+*/
+
+
 
 int main ( int argc, const char * argv[] ) 
     {
-    compiler myCompiler ( "humanCode.txt", "machineCode.txt" );  
+    compiler myCompiler ( "humanCode.txt", "machineCode.txt" );
+    Processor myProcessor;
+//    myProcessor.printItAll();
+     
+      
 //    Processor myProcessor;
 //    myProcessor.boss();
     
     return 0;
     }
-    
+
 
     
 
