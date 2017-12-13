@@ -49,7 +49,7 @@ enum commands
     mySin, myCos, mySqrt, myAbs, // 11
     myDup, dump,
     borderJump,
-    jmp, jne, ja, jae, jb, jbe, 
+    jmp, je, jne, ja, jae, jb, jbe, 
     borderArgument,
     pushR, popR, 
     pop, // 24
@@ -103,6 +103,7 @@ const char* duplicationCommandHuman = "dup";
 const char* dumpCommandHuman = "dump";
 
 const char* jmpCommandHuman = "jmp";
+const char* jeCommandHuman = "je";
 const char* jneCommandHuman = "jne";
 const char* jaCommandHuman = "ja";
 const char* jaeCommandHuman = "jae";

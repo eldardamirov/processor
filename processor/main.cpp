@@ -39,7 +39,8 @@ class Processor
              {
              std::cout << "HEY: " << currentMemoryCell << " " << instructionsArraySize << std::endl;
 //             for ( currentMemoryCell; currentMemoryCell < instructionsArraySize; currentMemoryCell++ )
-             for ( int i = 0; i < instructionsArraySize; i++ )
+//             for ( int i = 0; i < instructionsArraySize; i++ )
+             while ( 1 )
                  {
                  doCommand();
                  }
@@ -134,7 +135,7 @@ class Processor
             commandsQuantity = machineCode.calculateLinesQuantity();
             
             
-            for ( int currentCell = 0; currentCell < 36; currentCell++ )
+            for ( int currentCell = 0; currentCell < 34; currentCell++ )
                 {
                 if ( !machineCode.isEnd() )
                     {
@@ -233,6 +234,74 @@ class Processor
                     {
 //                    int cellAdress = instructionsArray [ currentMemoryCell + 1 ];  
                     currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                    }
+                case je:
+                    {
+                    
+                    //security checks HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    double first = *processorStack.top();
+                    processorStack.pop();
+                    double second = *processorStack.top();
+                    processorStack.pop();
+                    if ( first == second )
+                        {
+                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        }
+                    }
+                case jne:
+                    {
+                    double first = *processorStack.top();
+                    processorStack.pop();
+                    double second = *processorStack.top();
+                    processorStack.pop();
+                    if ( first != second )
+                        {
+                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        }
+                    }
+                case ja:
+                    {
+                    double first = *processorStack.top();
+                    processorStack.pop();
+                    double second = *processorStack.top();
+                    processorStack.pop();
+                    if ( first > second )
+                        {
+                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        }
+                    }
+                case jae:
+                    {
+                    double first = *processorStack.top();
+                    processorStack.pop();
+                    double second = *processorStack.top();
+                    processorStack.pop();
+                    if ( first >= second )
+                        {
+                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        }
+                    }
+                case jb:
+                    {
+                    double first = *processorStack.top();
+                    processorStack.pop();
+                    double second = *processorStack.top();
+                    processorStack.pop();
+                    if ( first < second )
+                        {
+                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        }
+                    }
+                case jbe:
+                    {
+                    double first = *processorStack.top();
+                    processorStack.pop();
+                    double second = *processorStack.top();
+                    processorStack.pop();
+                    if ( first <= second )
+                        {
+                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        }
                     }
                 default:
                     return -7;

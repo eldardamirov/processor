@@ -546,6 +546,10 @@ class compiler
                 {
                 return jmp;
                 }
+            if ( tempCommand == jeCommandHuman )
+                {
+                return je;
+                }
             if ( tempCommand == jneCommandHuman )
                 {
                 return jne;
