@@ -41,7 +41,7 @@
 //    };
 
 
-enum commands
+enum processorCommands
     {
     hlt, nullCommand,
     in, out,
@@ -56,6 +56,13 @@ enum commands
     pushS, popS,
     pushRAM, popRAM, 
     push // 29
+    };
+    
+enum gpuCommands
+    {
+    stpxl, drln, drcr, drplg,
+    stcl, 
+    gmrc, smrc
     };
     
     
@@ -79,7 +86,7 @@ enum argumentTypes
     };
 
 
-//// ------------------------------------------------------------------------------------------------
+//// ------------------------------------------- PROCESSOR COMMANDS -----------------------------------------------------
 
 const char* haultCommandHuman = "hlt";
 
@@ -110,6 +117,25 @@ const char* jaeCommandHuman = "jae";
 const char* jbCommandHuman = "jb";
 const char* jbeCommandHuman = "jbe";
 
-//// ------------------------------------------------------------------------------------------------
+//// ---------------------------------------------------------------------------------------------------------------
+
+
+//// ------------------------------------------- dGPU COMMANDS -----------------------------------------------------
+
+const char* setPixelCommandHuman = "stpxl";
+const char* drawLineCommandHuman = "drln";
+const char* drawCircleCommandHuman = "drcr";
+const char* drawPolygonCommandHuman = "drplg";
+const char* setColorCommandHuman = "stcl";
+//const char* setFillColorCommandHuman = "stfcl";
+const char* getdGPUMemoryCellCommandHuman = "gmrc";
+const char* setdGPUMemoryCellCommandHuman = "smrc";
+
+//// ---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 

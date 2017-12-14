@@ -33,6 +33,7 @@
 		86EC60511FA1DCDA00F0906D /* stack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
 		86EC60521FA1DD3B00F0906D /* logsConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logsConstants.h; sourceTree = "<group>"; };
 		86EC60531FA1DD3B00F0906D /* fileIO.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fileIO.h; sourceTree = "<group>"; };
+		86EF77E61FE275150077F432 /* gpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gpu.h; sourceTree = "<group>"; };
 		86F2CF481FAA614000D75CF7 /* commandsList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = commandsList.h; sourceTree = "<group>"; };
 		86F2CF4C1FAA6EC500D75CF7 /* compiler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = compiler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -79,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				86EC604A1FA1DCA200F0906D /* main.cpp */,
+				86EF77E61FE275150077F432 /* gpu.h */,
 				86F2CF481FAA614000D75CF7 /* commandsList.h */,
 				86F2CF4C1FAA6EC500D75CF7 /* compiler.h */,
 				86EC60511FA1DCDA00F0906D /* stack.h */,
