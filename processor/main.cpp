@@ -134,8 +134,8 @@ class Processor
             readFromFile machineCode ( "machineCode.txt" );
             commandsQuantity = machineCode.calculateLinesQuantity();
             
-            
-            for ( int currentCell = 0; currentCell < 34; currentCell++ )
+            /*
+            for ( int currentCell = 0; currentCell < 33; currentCell++ )
                 {
                 if ( !machineCode.isEnd() )
                     {
@@ -148,21 +148,68 @@ class Processor
                         }
                     }
                 }
+            */
+        
             
             /*
-            int currentCell = 0;
-            while ( !machineCode.isEnd() )
+            int currentCellTemp = 0;
+            std::string currentInput = "";
+            std::cout << "GET it:" << currentInput << "\n";
+
+            while ( ( !machineCode.isEnd() ) && ( currentInput != "\0" ) )
                 {
-                std::string temp = machineCode.getNextString();
-                if ( temp != "" )
+                currentInput = machineCode.getNextString();
+                std::cout << "GET it:" << currentInput << "\n";
+                if ( currentInput != "" )
                     {
-                    instructionsArray [ currentCell ] = std::stod ( temp );
+                    instructionsArray [ currentCellTemp ] = std::stod ( currentInput );
                     }
-                currentCell++;
+                currentCellTemp++;
                 }
             */
+            int currentCellTemp = 0;
+            for ( int currentLine = 0; currentLine < commandsQuantity; currentLine++ )
+                {
+                currentCellTemp = currentCellTemp + parseLine ( machineCode.getTillEndOfLine(), currentCellTemp );
+                }
+                
+            for ( int i = 0; i < 64; i++ )
+                {
+                std::cout << instructionsArray [ i ] << " ";
+                }
+            std::cout << "\n";
                 
             return 0;
+            }
+        
+        int parseLine ( std::string currentLine, int currentCellTemp )
+            {
+            int shift = 0;
+            std::string currentWord = "";
+            size_t lineSize = currentLine.size();
+            printf ( "Parsing: %s, size: %d\n",currentLine.c_str(), lineSize );
+            
+            for ( int currentCharIndex = 0; currentCharIndex < lineSize; currentCharIndex++ )
+                {
+                if ( currentLine [ currentCharIndex ] == ' ' )
+                    {
+                    instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
+                    shift++;
+                    printf ( "Parsed new word: %s, adress:%d\n", currentWord.c_str(), ( currentCellTemp + shift ) );
+                    currentWord = "";
+//                    printf ( "Parsed new word: %f\n", instructionsArray [ currentMemoryCell + shift ] );
+                    }
+                else
+                    {
+                    currentWord = currentWord + currentLine [ currentCharIndex ];
+                    printf ( "And current word is: %s\n", currentWord.c_str() );
+                    }
+                }
+            
+            instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
+            shift++;
+            
+            return shift;
             }
             
         
@@ -237,70 +284,96 @@ class Processor
                     }
                 case je:
                     {
-                    
-                    //security checks HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    double first = *processorStack.top();
-                    processorStack.pop();
-                    double second = *processorStack.top();
-                    processorStack.pop();
-                    if ( first == second )
+                    if ( processorStack.size() >= 2 )
                         {
-                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        //security checks HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        double first = *processorStack.top();
+                        processorStack.pop();
+                        double second = *processorStack.top();
+                        processorStack.pop();
+                        printf ( "VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: %f, %f\n", first, second );
+                        if ( first == second )
+                            {
+                            currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                            return 0;
+                            }
                         }
+                    
                     }
                 case jne:
                     {
-                    double first = *processorStack.top();
-                    processorStack.pop();
-                    double second = *processorStack.top();
-                    processorStack.pop();
-                    if ( first != second )
+                    if ( processorStack.size() >= 2 )
                         {
-                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        double first = *processorStack.top();
+                        processorStack.pop();
+                        double second = *processorStack.top();
+                        processorStack.pop();
+                        if ( first != second )
+                            {
+                            currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                            return 0;
+                            }
                         }
                     }
                 case ja:
                     {
-                    double first = *processorStack.top();
-                    processorStack.pop();
-                    double second = *processorStack.top();
-                    processorStack.pop();
-                    if ( first > second )
+                    if ( processorStack.size() >= 2 )
                         {
-                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        double first = *processorStack.top();
+                        processorStack.pop();
+                        double second = *processorStack.top();
+                        processorStack.pop();
+                        
+                        if ( first > second )
+                            {
+                            currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                            return 0;
+                            }
                         }
                     }
                 case jae:
                     {
-                    double first = *processorStack.top();
-                    processorStack.pop();
-                    double second = *processorStack.top();
-                    processorStack.pop();
-                    if ( first >= second )
+                    if ( processorStack.size() >= 2 )
                         {
-                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        double first = *processorStack.top();
+                        processorStack.pop();
+                        double second = *processorStack.top();
+                        processorStack.pop();
+                        if ( first >= second )
+                            {
+                            currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                            return 0;
+                            }
                         }
                     }
                 case jb:
                     {
-                    double first = *processorStack.top();
-                    processorStack.pop();
-                    double second = *processorStack.top();
-                    processorStack.pop();
-                    if ( first < second )
+                    if ( processorStack.size() >= 2 )
                         {
-                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        double first = *processorStack.top();
+                        processorStack.pop();
+                        double second = *processorStack.top();
+                        processorStack.pop();
+                        if ( first < second )
+                            {
+                            currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                            return 0;
+                            }
                         }
                     }
                 case jbe:
                     {
-                    double first = *processorStack.top();
-                    processorStack.pop();
-                    double second = *processorStack.top();
-                    processorStack.pop();
-                    if ( first <= second )
+                    if ( processorStack.size() >= 2 )
                         {
-                        currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                        double first = *processorStack.top();
+                        processorStack.pop();
+                        double second = *processorStack.top();
+                        processorStack.pop();
+                        if ( first <= second )
+                            {
+                            currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                            return 0;
+                            }
                         }
                     }
                 default:
