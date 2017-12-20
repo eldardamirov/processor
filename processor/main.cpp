@@ -76,7 +76,7 @@ class Processor
     private:
         Stack <double> processorStack;
         Stack <int> functionBackMarksStack;
-        double* instructionsArray = new double [ 100000000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
+        double* instructionsArray = new double [ 10000000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
         double* ram = new double [ 1024 ] {};
         size_t commandsQuantity = 0;
         int currentMemoryCell = 0;
@@ -505,7 +505,7 @@ class Processor
         int stackOut()
             {
 //            std::cout << "I was here!\n";
-            printf ( "AAA: %f\n", *processorStack.top() );
+            printf ( "%f\n", *processorStack.top() );
 //            std::cout << ( double ) *processorStack.top();
 
             processorStack.pop();
