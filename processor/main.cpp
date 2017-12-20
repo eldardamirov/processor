@@ -163,6 +163,7 @@ class Processor
 //            std::cout << "Current memory cell: " << currentMemoryCell << "\n";
             int commandId = instructionsArray [ currentMemoryCell ];
             printf ( "\nNow I'm doing command with id %d \n", commandId );
+            printf ( "Current memory cell: %d\n", currentMemoryCell );
 //            int operandaModifier = instructionsArray [ currentMemoryCell + 1 ]; //  IMPORTANT: note that operandaModifier current function variable may not contain real command operandaModifier;
             
             switch ( commandId )
@@ -209,12 +210,14 @@ class Processor
                     printf ( "That is true, I am ret, and current stack size is: %d", functionBackMarksStack.size() );
                     if ( functionBackMarksStack.size() > 0 )
                         {
+                        printf ( "And top element is equal to %d\n", *functionBackMarksStack.top() );
                         currentMemoryCell = *functionBackMarksStack.top(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         functionBackMarksStack.pop();
                         }
-                    
-                    currentMemoryCell = currentMemoryCell + 2;
-                    
+                    else
+                        {
+                        currentMemoryCell = currentMemoryCell + 2;
+                        }
                     return 0;
                     }
                 case pop:
