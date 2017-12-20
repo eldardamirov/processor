@@ -38,8 +38,7 @@ class Processor
         int controlCommandsDoing()
              {
              std::cout << "HEY: " << currentMemoryCell << " " << instructionsArraySize << std::endl;
-//             for ( currentMemoryCell; currentMemoryCell < instructionsArraySize; currentMemoryCell++ )
-//             for ( int i = 0; i < instructionsArraySize; i++ )
+
              while ( 1 )
                  {
                  doCommand();
@@ -69,42 +68,6 @@ class Processor
         //////////////////////////////
         //////////////////////////////
         
-            
-        /*
-        int boss()
-            {
-            
-            readFromFile machineCode ( "machineCode.txt" );
-            
-            int currentCommandId = 0;
-            std::string argument = "";
-            
-            //printf ( "%s", machineCode.getNextString().c_str() );
-            
-            while ( !machineCode.isEnd() )
-                {
-                currentCommandId = std::stoi ( machineCode.getNextString() );
-                
-                if ( currentCommandId > borderJump )
-                    {
-                    argument = machineCode.getNextString();
-                    }
-                    
-                if ( doCommand ( currentCommandId, argument ) == -2 )
-                    {
-                    printf ( "Goodbye" );
-                    return 0;
-                    }
-            
-//                processorStack.printItAll();
-                
-                argument = "";
-                }
-               
-            
-            return 0;
-            }
-        */
     
     private:
         Stack <double> processorStack;
@@ -117,10 +80,6 @@ class Processor
         // REGISTERS
         double* registerArray = new double [ registerQuantity ] {};
         
-        /// init, SHOULD BE IN SEPERATE FUNCTION;
-        
-        
-        ///
         
 //        double ax = 0.0, bx = 0.0, cx = 0.0, dx = 0.0;
 //        double n1 = 0.0, n2 = 0.0, nS = 0.0;
@@ -134,39 +93,7 @@ class Processor
             readFromFile machineCode ( "machineCode.txt" );
             commandsQuantity = machineCode.calculateLinesQuantity();
             
-            /*
-            for ( int currentCell = 0; currentCell < 33; currentCell++ )
-                {
-                if ( !machineCode.isEnd() )
-                    {
-                    std::string temp = machineCode.getNextString();
-//                    std::cout << temp << std::endl;
-                    if ( temp != "" )
-                        {
-                        instructionsArray [ currentCell ] = std::stod ( temp );
-                        printf ( "DEBUG2A: %s\n", temp.c_str() );
-                        }
-                    }
-                }
-            */
-        
-            
-            /*
-            int currentCellTemp = 0;
-            std::string currentInput = "";
-            std::cout << "GET it:" << currentInput << "\n";
 
-            while ( ( !machineCode.isEnd() ) && ( currentInput != "\0" ) )
-                {
-                currentInput = machineCode.getNextString();
-                std::cout << "GET it:" << currentInput << "\n";
-                if ( currentInput != "" )
-                    {
-                    instructionsArray [ currentCellTemp ] = std::stod ( currentInput );
-                    }
-                currentCellTemp++;
-                }
-            */
             int currentCellTemp = 0;
             for ( int currentLine = 0; currentLine < commandsQuantity; currentLine++ )
                 {
@@ -197,7 +124,7 @@ class Processor
                     shift++;
                     printf ( "Parsed new word: %s, adress:%d\n", currentWord.c_str(), ( currentCellTemp + shift ) );
                     currentWord = "";
-//                    printf ( "Parsed new word: %f\n", instructionsArray [ currentMemoryCell + shift ] );
+
                     }
                 else
                     {

@@ -124,7 +124,7 @@ class compiler
                     if ( currentCommandIdTemp < borderArgument )
                         {
                         // JUMPs HERE;
-//                        printf ( "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF\n" );
+
                         commandsArray [ currentCommand ].commandId = currentCommandIdTemp;
                         commandsArray [ currentCommand ].operandaModifier = -2;
                         commandsArray [ currentCommand ].argumentS = clearFromSpaces ( getWordInString ( currentInputLine, 1 ) );
@@ -569,6 +569,14 @@ class compiler
             if ( tempCommand == jbeCommandHuman )
                 {
                 return jbe;
+                }
+            if ( tempCommand == callCommandHuman )
+                {
+                return call;
+                }
+            if ( tempCommand == returnCommandHuman )
+                {
+                return ret;
                 }
             
             

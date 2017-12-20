@@ -48,8 +48,9 @@ enum processorCommands
     add, sub, mul, myDiv, // 7
     mySin, myCos, mySqrt, myAbs, // 11
     myDup, dump,
+    ret,
     borderJump,
-    jmp, je, jne, ja, jae, jb, jbe, 
+    jmp, je, jne, ja, jae, jb, jbe, call,
     borderArgument,
     pushR, popR, 
     pop, // 24
@@ -117,6 +118,10 @@ const char* jaeCommandHuman = "jae";
 const char* jbCommandHuman = "jb";
 const char* jbeCommandHuman = "jbe";
 
+const char* callCommandHuman = "call";
+const char* returnCommandHuman = "ret";
+
+
 //// ---------------------------------------------------------------------------------------------------------------
 
 
@@ -127,7 +132,6 @@ const char* drawLineCommandHuman = "drln";
 const char* drawCircleCommandHuman = "drcr";
 const char* drawPolygonCommandHuman = "drplg";
 const char* setColorCommandHuman = "stcl";
-//const char* setFillColorCommandHuman = "stfcl";
 const char* getdGPUMemoryCellCommandHuman = "gmrc";
 const char* setdGPUMemoryCellCommandHuman = "smrc";
 
