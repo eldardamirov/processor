@@ -11,10 +11,51 @@
 
 // d is for "discrete"
 
+template <typename color> struct colorData
+    {
+    double red = 0.0;
+    double green = 0.0;
+    double blue = 0.0;
+    double alpha = 0.0;
+    }
+
+
 class dGPU
     {
-    dGPU (  )
+    public:
+        dGPU ( int screenX, int screenY )
+            {
+            
+            }
+    
+    private:
+        color* l3Memory = new color [ ( screenX * screenY ) ]; 
+    
+    
+    }
+    
+    
+
+class gpuUnit
+    {
+    public:
+        gpuUnit ( int frequency, int l1MemorySize )
+            {
         
+            }
+    
+    
+    
+    
+    private:
+        int frequency = 0, l1MemorySize = 0;
+        
+        int setPixel ( int pixelAdress, color pixelColor, color* l3Memory )
+            {
+            l3MemoryAdress 
+            
+            return 0;
+            }
     
     
     
