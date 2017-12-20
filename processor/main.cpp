@@ -37,11 +37,14 @@ class Processor
             
         int controlCommandsDoing()
              {
-             std::cout << "HEY: " << currentMemoryCell << " " << instructionsArraySize << std::endl;
+//             std::cout << "HEY: " << currentMemoryCell << " " << instructionsArraySize << std::endl;
 
              while ( 1 )
                  {
-                 doCommand();
+                 if ( doCommand() == -9 )
+                     {
+                     return 0;
+                     }
                  }
              
              return 0;
@@ -54,10 +57,10 @@ class Processor
             
         void printItAll()
             {
-            std::cout << "I was here\n";
+//            std::cout << "I was here\n";
             for ( int i = 0; i < commandsQuantity * 2; i++ )
                 {
-                std::cout << instructionsArray [ i ] << std::endl;
+//                std::cout << instructionsArray [ i ] << std::endl;
                 }
             
             }
@@ -103,7 +106,7 @@ class Processor
                 
             for ( int i = 0; i < 64; i++ )
                 {
-                std::cout << instructionsArray [ i ] << " ";
+//                std::cout << instructionsArray [ i ] << " ";
                 }
             std::cout << "\n";
                 
@@ -121,16 +124,28 @@ class Processor
                 {
                 if ( currentLine [ currentCharIndex ] == ' ' )
                     {
-                    instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
+                    ///////////////////////////////////////////
+                    ///////////////////////////////////////////
+                    ///////////////////////////////////////////
+                    if ( currentWord != "" )
+                        {
+                        instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
+                        }
+                    
+                    //////////////////////////////////////////
+                    ///////////////////////////////////////////
+                    ///////////////////////////////////////////
+                    
+                    
                     shift++;
-                    printf ( "Parsed new word: %s, adress:%d\n", currentWord.c_str(), ( currentCellTemp + shift ) );
+//                    printf ( "Parsed new word: %s, adress:%d\n", currentWord.c_str(), ( currentCellTemp + shift ) );
                     currentWord = "";
 
                     }
                 else
                     {
                     currentWord = currentWord + currentLine [ currentCharIndex ];
-                    printf ( "And current word is: %s\n", currentWord.c_str() );
+//                    printf ( "And current word is: %s\n", currentWord.c_str() );
                     }
                 }
             
@@ -144,15 +159,16 @@ class Processor
         
         int doCommand () 
             {
-//            printf ( "\nNow I'm doing command with id %d and argument %s\n", commandId, argument.c_str() );
-            std::cout << "Current memory cell: " << currentMemoryCell << "\n";
+            
+//            std::cout << "Current memory cell: " << currentMemoryCell << "\n";
             int commandId = instructionsArray [ currentMemoryCell ];
+            printf ( "\nNow I'm doing command with id %d \n", commandId );
 //            int operandaModifier = instructionsArray [ currentMemoryCell + 1 ]; //  IMPORTANT: note that operandaModifier current function variable may not contain real command operandaModifier;
             
             switch ( commandId )
                 {
                 case hlt:
-                    return 2; // stop;
+                    return -9; // stop;
                 case nullCommand:
                     return nullCommand; // some error occured;
                 case out:
@@ -190,8 +206,14 @@ class Processor
                     return 2;
                 case ret:
                     {
-                    currentMemoryCell = *functionBackMarksStack.top(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    functionBackMarksStack.pop();
+                    printf ( "That is true, I am ret, and current stack size is: %d", functionBackMarksStack.size() );
+                    if ( functionBackMarksStack.size() > 0 )
+                        {
+                        currentMemoryCell = *functionBackMarksStack.top(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        functionBackMarksStack.pop();
+                        }
+                    
+                    currentMemoryCell = currentMemoryCell + 2;
                     
                     return 0;
                     }
@@ -214,7 +236,7 @@ class Processor
                     }
                 case call:
                     {
-                    functionBackMarksStack.push ( ( currentMemoryCell + 1 ) );
+                    functionBackMarksStack.push ( ( currentMemoryCell + 2 ) );
                     currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
                     return 0;
                     }
@@ -232,7 +254,7 @@ class Processor
                         processorStack.pop();
                         double second = *processorStack.top();
                         processorStack.pop();
-                        printf ( "VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: %f, %f\n", first, second );
+//                        printf ( "VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: %f, %f\n", first, second );
                         if ( first == second )
                             {
                             currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
@@ -377,7 +399,7 @@ class Processor
                 {
                 processorStack.push ( instructionsArray [ currentMemoryCell + 2 ] );
                 
-                std::cout << "DEBUG: " << *processorStack.top() << " AND SIZE IS: " << processorStack.size() << std::endl;
+//                std::cout << "DEBUG: " << *processorStack.top() << " AND SIZE IS: " << processorStack.size() << std::endl;
                 
                 currentMemoryCell = currentMemoryCell + 3;
                 return 0;
@@ -474,6 +496,7 @@ class Processor
             
         int stackOut()
             {
+            std::cout << "I was here!\n";
             printf ( "AAA: %f\n", *processorStack.top() );
 //            std::cout << ( double ) *processorStack.top();
 
@@ -489,9 +512,9 @@ class Processor
             
 //            std::cout << "I've pushed: " << temp << std::endl;
             
-            std::cout << ">>>>>>>>>>>>>>>>>> DUMP <<<<<<<<<<<<<<<<<<<<\n";
-            std::cout << processorStack.size() << "\n";
-            std::cout << ">>>>>>>>>>>>>>>>>> DUMP <<<<<<<<<<<<<<<<<<<<\n";
+//            std::cout << ">>>>>>>>>>>>>>>>>> DUMP <<<<<<<<<<<<<<<<<<<<\n";
+//            std::cout << processorStack.size() << "\n";
+//            std::cout << ">>>>>>>>>>>>>>>>>> DUMP <<<<<<<<<<<<<<<<<<<<\n";
             
             temp = temp + *processorStack.top();
 //            std::cout << "I've pushed: " << temp << std::endl;
@@ -600,8 +623,9 @@ class Processor
             
         int stackDup()
             {
+            std::cout << "I was here! size: " << processorStack.size() << "\n";
             processorStack.push ( *processorStack.top() );
-            
+            std::cout << "Final! size: " << processorStack.size() << "\n";
             currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
