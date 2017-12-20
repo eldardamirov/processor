@@ -51,6 +51,7 @@ class compiler
         ~compiler()
             {
             compilationEndTime = time ( NULL );
+//            printf ( "\nHBFHVHDVGHUJVIHUVJGHBVG: %d\n", commandInMemoryLocation );
             }
     
     
@@ -62,6 +63,10 @@ class compiler
         std::string humanCodeFileName = "", machineCodeFileName = "";
         //// ------------------------------------------------------------------------------------------------      
         std::unordered_map <std::string, int> jumpMarks {};
+        //// ------------------------------------------------------------------------------------------------
+        long long allUnitsQuantity = 0;
+        int commandInMemoryLocation = -1;
+        //// ------------------------------------------------------------------------------------------------
         
         
         command* makeMachineCode()
@@ -73,7 +78,7 @@ class compiler
             int linesQuantity = humanCodeFile.calculateLinesQuantity();
             
             command* commandsArray = new command [ linesQuantity ];
-            int commandInMemoryLocation = -1;
+//            int commandInMemoryLocation = -1;
             
             std::string currentInputLine = "";
             
@@ -85,8 +90,6 @@ class compiler
             
             //////------DEBUG
             
-            int debug [ 128 ] = {};
-            int g = 0;
             
             //////----------
             
@@ -111,11 +114,11 @@ class compiler
                     commandInMemoryLocation = commandInMemoryLocation + 2;
 //                    commandInMemoryLocation++;
                     
-                    //------DEBUG-----\\\
-                    
-                    debug [ g ] = commandInMemoryLocation;
-                    g++;
-                    //-----------------\\
+                    ////////////////////////////////////
+                    ////////////////////////////////////
+
+                    ////////////////////////////////////
+                    ////////////////////////////////////
                     
                     }
                 else if ( currentCommandIdTemp != nullCommand ) 
@@ -131,10 +134,6 @@ class compiler
                         
                         commandInMemoryLocation = commandInMemoryLocation + 2;
                         
-                        //------DEBUG-----
-                    
-                        
-                        //-----------------
                         
                         }
                     else
@@ -146,21 +145,11 @@ class compiler
                             commandsArray [ currentCommand ].operandaModifier = -1;
                             commandInMemoryLocation = commandInMemoryLocation + 2;   //////////////////////////////////////// "+ 2"
                             
-                            //------DEBUG-----
-                    
-                            debug [ g ] = commandInMemoryLocation;
-                            g++;
-                            //-----------------
                             }
                         else
                             {
                             commandInMemoryLocation = commandInMemoryLocation + argumentAnalyser( commandsArray, currentCommand, currentArgumentTemp );
-                            
-                            //------DEBUG-----
-                    
-                            debug [ g ] = commandInMemoryLocation;
-                            g++;
-                            //-----------------
+
                             
                             }
                         
@@ -232,7 +221,8 @@ class compiler
             
             std::string lineToWrite = "";
 //            std::cout << commandsArray [ 1 ].commandId << " " << commandsArray [ 1 ].operandaModifier << " " << commandsArray [ 1 ].argumentS << " " << commandsArray [ 1 ].argumentS2 << " " << commandsArray [ 1 ].argument << " " << commandsArray [ 1 ].argument2 << "\n";
-            
+//            std::string sumOfMemoryCells = std::to_string ( commandInMemoryLocation ) + "\n";
+//            machineCodeFile.writeString ( sumOfMemoryCells );
             for ( int currentLine = 0; currentLine < linesQuantity; currentLine++ ) 
                 {
                 lineToWrite = "";

@@ -9,6 +9,13 @@
 #ifndef basicMethods_h
 #define basicMethods_h
 
+
+bool isDigit ( char inputChar );
+bool isLetter ( char inputChar ); // lowerCase ONLY;
+int fromStringToNumber ( std::string number );
+int fromStringToInt ( char figure );
+
+
 bool isDigit ( char inputChar )
     {
     if ( ( inputChar >= '0' ) && ( inputChar <= '9' ) )
@@ -39,6 +46,35 @@ bool isArithmetic ( char inputChar )
         return true;
     else
         return false;
+    }
+
+
+int fromStringToNumber ( std::string number )
+    {
+    int result = 0;
+
+    for ( int i = 0; i < number.length(); i++ )
+        {
+        result = result + fromStringToInt ( number [ i ] ) * pow ( 10, number.length() - i - 1 );
+        }
+
+    return result;
+    }
+    
+int fromStringToInt ( char figure )
+    {
+    int temp = 0;
+
+    if ( figure - '0' < 10 )
+        {
+        temp = figure - '0';
+        }
+    else
+        {
+        temp = figure - ( 'A' - 10 );  // - 55
+        }
+
+        return temp;
     }
 
 

@@ -29,7 +29,9 @@ class Processor
     public:
         Processor() : processorStack ( Stack <double> ( 256, LOW ) ), functionBackMarksStack ( Stack <int> ( 256, LOW ) )
             {
-            makeInstructionStack();
+            cellQuantity = makeInstructionStack();
+//            double* instructionsArray = new double [ cellQuantity * 100 ] {};
+            printf ( "SO: %d\n", cellQuantity );
             printItAll();
             controlCommandsDoing();
             }
@@ -76,10 +78,12 @@ class Processor
     private:
         Stack <double> processorStack;
         Stack <int> functionBackMarksStack;
-        double* instructionsArray = new double [ 10000000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
         double* ram = new double [ 1024 ] {};
         size_t commandsQuantity = 0;
         int currentMemoryCell = 0;
+        int cellQuantity = 0;
+        double* instructionsArray = new double [ 100000000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s
+//        double* instructionsArray = new double [ cellQuantity * 100 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s
         
         
         // REGISTERS
@@ -99,19 +103,23 @@ class Processor
             commandsQuantity = machineCode.calculateLinesQuantity();
             
 
+//            cellQuantity = fromStringToNumber ( machineCode.getTillEndOfLine() );
+//            printf ( "SO HERE IT IS: %d\n", cellQuantity );
+
             int currentCellTemp = 0;
             for ( int currentLine = 0; currentLine < commandsQuantity; currentLine++ )
                 {
                 currentCellTemp = currentCellTemp + parseLine ( machineCode.getTillEndOfLine(), currentCellTemp );
+//                parseLine ( machineCode.getTillEndOfLine(), currentCellTemp );
                 }
-                
+            
 //            for ( int i = 0; i < 64; i++ )
 //                {
-////                std::cout << instructionsArray [ i ] << " ";
+//                std::cout << instructionsArray [ i ] << " ";
 //                }
 //            std::cout << "\n";
-                
-            return 0;
+            cellQuantity = currentCellTemp;
+            return currentCellTemp;
             }
         
         int parseLine ( std::string currentLine, int currentCellTemp )
