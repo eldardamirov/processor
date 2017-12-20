@@ -133,8 +133,7 @@ class compiler
                         
                         //------DEBUG-----
                     
-                        debug [ g ] = commandInMemoryLocation;
-                        g++;
+                        
                         //-----------------
                         
                         }

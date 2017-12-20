@@ -74,7 +74,8 @@ class readFromFile
             std::string tempNextString = "";
             char tempCurrentChar = ' ';
             
-            if ( !isEnd() )
+//            if ( !isEnd() )
+              if ( !( ( currentChar - 1 ) > fileSize ) )
                 {
                 tempCurrentChar = getNextChar();
                 }
@@ -96,6 +97,7 @@ class readFromFile
             char tempCurrentChar = ' ';
             
             if ( !isEnd() )
+//            if ( ! ( ( currentChar - 1 ) > fileSize ) )
                 {
                 tempCurrentChar = getNextChar();
                 }

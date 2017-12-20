@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <cmath>
 #include <string>
+#include <time.h>
 
 
 #include "fileIO.h"
@@ -58,10 +59,10 @@ class Processor
         void printItAll()
             {
 //            std::cout << "I was here\n";
-            for ( int i = 0; i < commandsQuantity * 2; i++ )
-                {
-//                std::cout << instructionsArray [ i ] << std::endl;
-                }
+//            for ( int i = 0; i < commandsQuantity * 2; i++ )
+//                {
+////                std::cout << instructionsArray [ i ] << std::endl;
+//                }
             
             }
             
@@ -104,11 +105,11 @@ class Processor
                 currentCellTemp = currentCellTemp + parseLine ( machineCode.getTillEndOfLine(), currentCellTemp );
                 }
                 
-            for ( int i = 0; i < 64; i++ )
-                {
-//                std::cout << instructionsArray [ i ] << " ";
-                }
-            std::cout << "\n";
+//            for ( int i = 0; i < 64; i++ )
+//                {
+////                std::cout << instructionsArray [ i ] << " ";
+//                }
+//            std::cout << "\n";
                 
             return 0;
             }
@@ -118,7 +119,7 @@ class Processor
             int shift = 0;
             std::string currentWord = "";
             size_t lineSize = currentLine.size();
-            printf ( "Parsing: %s, size: %d\n",currentLine.c_str(), lineSize );
+//            printf ( "Parsing: %s, size: %d\n",currentLine.c_str(), lineSize );
             
             for ( int currentCharIndex = 0; currentCharIndex < lineSize; currentCharIndex++ )
                 {
@@ -148,8 +149,12 @@ class Processor
 //                    printf ( "And current word is: %s\n", currentWord.c_str() );
                     }
                 }
-            
-            instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
+//                printf ( "!:%s:!", currentWord.c_str() );
+            if ( currentWord != "" )
+                {
+                instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
+//                shift++;
+                }
             shift++;
             
             return shift;
@@ -162,8 +167,8 @@ class Processor
             
 //            std::cout << "Current memory cell: " << currentMemoryCell << "\n";
             int commandId = instructionsArray [ currentMemoryCell ];
-            printf ( "\nNow I'm doing command with id %d \n", commandId );
-            printf ( "Current memory cell: %d\n", currentMemoryCell );
+//            printf ( "\nNow I'm doing command with id %d \n", commandId );
+//            printf ( "Current memory cell: %d\n", currentMemoryCell );
 //            int operandaModifier = instructionsArray [ currentMemoryCell + 1 ]; //  IMPORTANT: note that operandaModifier current function variable may not contain real command operandaModifier;
             
             switch ( commandId )
@@ -207,10 +212,10 @@ class Processor
                     return 2;
                 case ret:
                     {
-                    printf ( "That is true, I am ret, and current stack size is: %d", functionBackMarksStack.size() );
+//                    printf ( "That is true, I am ret, and current stack size is: %d", functionBackMarksStack.size() );
                     if ( functionBackMarksStack.size() > 0 )
                         {
-                        printf ( "And top element is equal to %d\n", *functionBackMarksStack.top() );
+//                        printf ( "And top element is equal to %d\n", *functionBackMarksStack.top() );
                         currentMemoryCell = *functionBackMarksStack.top(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         functionBackMarksStack.pop();
                         }
@@ -499,7 +504,7 @@ class Processor
             
         int stackOut()
             {
-            std::cout << "I was here!\n";
+//            std::cout << "I was here!\n";
             printf ( "AAA: %f\n", *processorStack.top() );
 //            std::cout << ( double ) *processorStack.top();
 
@@ -626,9 +631,9 @@ class Processor
             
         int stackDup()
             {
-            std::cout << "I was here! size: " << processorStack.size() << "\n";
+//            std::cout << "I was here! size: " << processorStack.size() << "\n";
             processorStack.push ( *processorStack.top() );
-            std::cout << "Final! size: " << processorStack.size() << "\n";
+//            std::cout << "Final! size: " << processorStack.size() << "\n";
             currentMemoryCell = currentMemoryCell + 2;
             return 0;
             }
@@ -703,13 +708,17 @@ int main()
 
 int main ( int argc, const char * argv[] ) 
     {
+    int begin = time ( NULL );
     compiler myCompiler ( "humanCode.txt", "machineCode.txt" );
+    int medium = time ( NULL );
     Processor myProcessor;
 //    myProcessor.printItAll();
      
       
 //    Processor myProcessor;
 //    myProcessor.boss();
+    int end = time ( NULL );
+    printf ( "COMPILATION: %d, PROCESSING: %d, SUMMARY: %d", ( medium - begin ), ( end - medium ), ( end - begin ) );
     
     return 0;
     }
