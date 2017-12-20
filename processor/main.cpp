@@ -76,7 +76,7 @@ class Processor
     private:
         Stack <double> processorStack;
         Stack <int> functionBackMarksStack;
-        double* instructionsArray = new double [ instructionsArraySize ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
+        double* instructionsArray = new double [ 100000000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
         double* ram = new double [ 1024 ] {};
         size_t commandsQuantity = 0;
         int currentMemoryCell = 0;
@@ -149,13 +149,13 @@ class Processor
 //                    printf ( "And current word is: %s\n", currentWord.c_str() );
                     }
                 }
-//                printf ( "!:%s:!", currentWord.c_str() );
+//                printf ( "!:%s:!\n", currentWord.c_str() );
             if ( currentWord != "" )
                 {
                 instructionsArray [ currentCellTemp + shift ] = std::stod ( currentWord );
-//                shift++;
+                shift++;
                 }
-            shift++;
+//            shift++;
             
             return shift;
             }
