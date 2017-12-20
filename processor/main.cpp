@@ -26,7 +26,7 @@ const int instructionsArraySize = 64; // OMG, WHAT IS IT? CAN YOU DO SOMETHING A
 class Processor
     {
     public:
-        Processor() : processorStack ( Stack <double> ( 256, LOW ) )
+        Processor() : processorStack ( Stack <double> ( 256, LOW ) ), functionBackMarksStack ( Stack <int> ( 256, LOW ) )
             {
             makeInstructionStack();
             printItAll();
@@ -71,6 +71,7 @@ class Processor
     
     private:
         Stack <double> processorStack;
+        Stack <int> functionBackMarksStack;
         double* instructionsArray = new double [ instructionsArraySize ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;
         double* ram = new double [ 1024 ] {};
         size_t commandsQuantity = 0;
@@ -187,6 +188,13 @@ class Processor
                 case dump:
                     stackDump();
                     return 2;
+                case ret:
+                    {
+                    currentMemoryCell = *functionBackMarksStack.top(); // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    functionBackMarksStack.pop();
+                    
+                    return 0;
+                    }
                 case pop:
                     {
                     int operandaModifier = instructionsArray [ currentMemoryCell + 1 ];
@@ -202,6 +210,12 @@ class Processor
                 case in:
                     {
                     stackIn();
+                    return 0;
+                    }
+                case call:
+                    {
+                    functionBackMarksStack.push ( ( currentMemoryCell + 1 ) );
+                    currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
                     return 0;
                     }
                 case jmp:
