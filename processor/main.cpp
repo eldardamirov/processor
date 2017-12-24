@@ -12,13 +12,14 @@
 #include <string>
 #include <time.h>
 
-
+#include "dgpu.h"
 #include "fileIO.h"
 #include "stack.h" 
 #include "compiler.h"
 
 
-const int instructionsArraySize = 64; // OMG, WHAT IS IT? CAN YOU DO SOMETHING AT LEAST NORMAL?
+
+//const int instructionsArraySize = 64; // OMG, WHAT IS IT? CAN YOU DO SOMETHING AT LEAST NORMAL?
 
 
 
@@ -726,6 +727,7 @@ int main ( int argc, const char * argv[] )
 //    Processor myProcessor;
 //    myProcessor.boss();
     int end = time ( NULL );
+
     printf ( "COMPILATION: %d, PROCESSING: %d, SUMMARY: %d", ( medium - begin ), ( end - medium ), ( end - begin ) );
     
     return 0;

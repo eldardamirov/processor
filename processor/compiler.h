@@ -450,6 +450,7 @@ class compiler
             return memoryShift;
             }
             
+            
         std::string clearFromSpaces ( std::string currentArgumentTemp )
             {
             std::string result = "";

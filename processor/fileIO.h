@@ -140,7 +140,6 @@ class readFromFile
                 {
                 index = ( strchr ( ( index + 1 ), '\n' ) );
                 linesQuantity++;
-                
                 }
 
             linesQuantity = linesQuantity + 1;
