@@ -28,19 +28,19 @@ const int l2MemorySize = 1024;
 const int l1MemorySize = 128;
 
 
-struct color
+typedef struct tag_color
     {
     double red = 0.0;
     double green = 0.0;
     double blue = 0.0;
     double alpha = 0.0;
-    };
+    } color;
     
-struct position
+typedef struct tag_position
     {
     int x = 0;
     int y = 0;
-    };
+    } position;
     
 struct gpuCommand
     {
