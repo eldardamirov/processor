@@ -271,7 +271,7 @@ class Processor
                         processorStack.pop();
                         double second = *processorStack.top();
                         processorStack.pop();
-//                        printf ( "VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: %f, %f\n", first, second );
+                        printf ( "VERY IMPORTANT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: %f, %f\n", first, second );
                         if ( first == second )
                             {
                             currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
@@ -285,15 +285,15 @@ class Processor
                     {
                     if ( processorStack.size() >= 2 )
                         {
-// ----!!                        std::cout << "I was here\n";
+//                       std::cout << "I was here\n";
                         double first = *processorStack.top();
                         processorStack.pop();
                         double second = *processorStack.top();
                         processorStack.pop();
-// ----!!                       std::cout << first << "  " << second << "\n";
+//                       std::cout << first << "  " << second << "\n";
                         if ( first != second )
                             {
-// ----!!                       std::cout << "And here I was!\n";
+//                       std::cout << "And here I was!\n";
                             currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
                             return 0;
                             }
@@ -439,7 +439,7 @@ class Processor
             if ( operandaModifier == 7 )
                 {
                 processorStack.push ( registerArray [ ( int ) instructionsArray [ ( int ) currentMemoryCell + 2 ] ] );
-                
+//                std::cout << "DEBUG: " << *processorStack.top() << " " << registerArray [ ( int ) instructionsArray [ ( int ) currentMemoryCell + 2 ] ] << " AND SIZE IS: " << processorStack.size() << std::endl;
                 currentMemoryCell = currentMemoryCell + 3;
                 return 0;
                 }
@@ -514,7 +514,8 @@ class Processor
             
             if ( operandaModifier == 7 )
                 {
-                registerArray [ ax ] = *processorStack.top();
+                registerArray [ ( int ) instructionsArray [ currentMemoryCell + 2 ] ] = *processorStack.top();
+//                std::cout << " HEYY " << *processorStack.top() << "\n";
                 processorStack.pop();
                 
                 currentMemoryCell = currentMemoryCell + 3;
