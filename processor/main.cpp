@@ -278,22 +278,28 @@ class Processor
                             return 0;
                             }
                         }
-                    
+                        
+                    currentMemoryCell = currentMemoryCell + 2;
                     }
                 case jne:
                     {
                     if ( processorStack.size() >= 2 )
                         {
+// ----!!                        std::cout << "I was here\n";
                         double first = *processorStack.top();
                         processorStack.pop();
                         double second = *processorStack.top();
                         processorStack.pop();
+// ----!!                       std::cout << first << "  " << second << "\n";
                         if ( first != second )
                             {
+// ----!!                       std::cout << "And here I was!\n";
                             currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
                             return 0;
                             }
                         }
+                        
+                    currentMemoryCell = currentMemoryCell + 2;
                     }
                 case ja:
                     {
@@ -310,6 +316,8 @@ class Processor
                             return 0;
                             }
                         }
+                        
+                    currentMemoryCell = currentMemoryCell + 2;
                     }
                 case jae:
                     {
@@ -325,6 +333,8 @@ class Processor
                             return 0;
                             }
                         }
+                        
+                    currentMemoryCell = currentMemoryCell + 2;
                     }
                 case jb:
                     {
@@ -340,6 +350,8 @@ class Processor
                             return 0;
                             }
                         }
+                    
+                    currentMemoryCell = currentMemoryCell + 2;
                     }
                 case jbe:
                     {
@@ -355,6 +367,8 @@ class Processor
                             return 0;
                             }
                         }
+                        
+                    currentMemoryCell = currentMemoryCell + 2;
                     }
                 default:
                     return -7;

@@ -39,5 +39,5 @@ __kernel void unitSetPixel ( __global int *l3Memory, __global const color* pixel
         }
     }
     
-__kernel 
+
 
