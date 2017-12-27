@@ -746,16 +746,16 @@ int main()
 
 int main ( int argc, const char * argv[] ) 
     {
-    int begin = time ( NULL );
+    clock_t begin = clock();
     compiler myCompiler ( "humanCode.txt", "machineCode.txt" );
-    int medium = time ( NULL );
+    clock_t medium = clock();
     Processor myProcessor;
 //    myProcessor.printItAll();
      
       
 //    Processor myProcessor;
 //    myProcessor.boss();
-    int end = time ( NULL );
+    clock_t end = clock();
 
     printf ( "COMPILATION: %d, PROCESSING: %d, SUMMARY: %d", ( medium - begin ), ( end - medium ), ( end - begin ) );
     
