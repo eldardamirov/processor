@@ -33,7 +33,7 @@ class Processor
             cellQuantity = makeInstructionStack();
 //            double* instructionsArray = new double [ cellQuantity * 100 ] {};
             printf ( "SO: %d\n", cellQuantity );
-            printItAll();
+
             controlCommandsDoing();
             }
             
@@ -59,15 +59,7 @@ class Processor
         //////////////////////////////
         //////////////////////////////
             
-        void printItAll()
-            {
-//            std::cout << "I was here\n";
-//            for ( int i = 0; i < commandsQuantity * 2; i++ )
-//                {
-////                std::cout << instructionsArray [ i ] << std::endl;
-//                }
-            
-            }
+
             
         
         
@@ -83,7 +75,7 @@ class Processor
         size_t commandsQuantity = 0;
         int currentMemoryCell = 0;
         int cellQuantity = 0;
-        double* instructionsArray = new double [ 100000000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s
+        double* instructionsArray = new double [ 1000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s 100000000
 //        double* instructionsArray = new double [ cellQuantity * 100 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s
         
         

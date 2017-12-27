@@ -1,3 +1,9 @@
+#pragma OPENCL EXTENSION cl_khr_fp64 : enable
+
+
+
+
+
 // SORRY, it is C98, i can't initialize doubles in structs properly;
 
 typedef struct tagColor 
@@ -39,5 +45,35 @@ __kernel void unitSetPixel ( __global int *l3Memory, __global const color* pixel
         }
     }
     
+    
+
+__kernel void vectorAdd ( __global const int* first, __global const int* second, __global int* result )
+    {
+    int myId = get_global_id ( 0 );
+    
+    result [ myId ] = first [ myId ] + second [ myId ];
+    }
+    
+    
+__kernel void vectorSub ( __global const int* first, __global const int* second, __global int* result )
+    {
+    int myId = get_global_id ( 0 );
+    
+    result [ myId ] = first [ myId ] - second [ myId ];
+    }
+    
+__kernel void vectorMul ( __global const int* first, __global const int* second, __global int* result )
+    {
+    int myId = get_global_id ( 0 );
+    
+    result [ myId ] = first [ myId ] * second [ myId ];
+    }
+
+__kernel void vectorDiv ( __global const int* first, __global const int* second, __global int* result )
+    {
+    int myId = get_global_id ( 0 );
+    
+    result [ myId ] = first [ myId ] / second [ myId ];
+    }
 
 

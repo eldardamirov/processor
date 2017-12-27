@@ -288,7 +288,6 @@ class writeToFile
 
         void init()
             {
-//            fileDescriptor = open ( "machineCode.txt", O_RDWR | O_CREAT , ( mode_t ) 0600 );
             fileDescriptor = open ( outputFileName, O_RDWR | O_CREAT , ( mode_t ) 0600 );
             if ( fileDescriptor < 0 )
                 {
