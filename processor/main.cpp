@@ -261,6 +261,8 @@ class Processor
                     {
 //                    int cellAdress = instructionsArray [ currentMemoryCell + 1 ];  
                     currentMemoryCell = instructionsArray [ currentMemoryCell + 1 ] + 1;
+                    
+                    return 0;
                     }
                 case je:
                     {
@@ -280,6 +282,8 @@ class Processor
                         }
                         
                     currentMemoryCell = currentMemoryCell + 2;
+                    
+                    return 0;
                     }
                 case jne:
                     {
@@ -300,6 +304,8 @@ class Processor
                         }
                         
                     currentMemoryCell = currentMemoryCell + 2;
+                    
+                    return 0;
                     }
                 case ja:
                     {
@@ -318,6 +324,8 @@ class Processor
                         }
                         
                     currentMemoryCell = currentMemoryCell + 2;
+                    
+                    return 0;
                     }
                 case jae:
                     {
@@ -335,6 +343,8 @@ class Processor
                         }
                         
                     currentMemoryCell = currentMemoryCell + 2;
+                    
+                    return 0;
                     }
                 case jb:
                     {
@@ -352,6 +362,8 @@ class Processor
                         }
                     
                     currentMemoryCell = currentMemoryCell + 2;
+                    
+                    return 0;
                     }
                 case jbe:
                     {
@@ -369,6 +381,8 @@ class Processor
                         }
                         
                     currentMemoryCell = currentMemoryCell + 2;
+                    
+                    return 0;
                     }
                 default:
                     return -7;
