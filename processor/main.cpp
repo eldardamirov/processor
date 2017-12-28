@@ -30,10 +30,12 @@ class Processor
     public:
         Processor() : processorStack ( Stack <double> ( 256, LOW ) ), functionBackMarksStack ( Stack <int> ( 256, LOW ) )
             {
-            cellQuantity = makeInstructionStack();
-//            double* instructionsArray = new double [ cellQuantity * 100 ] {};
-            printf ( "SO: %d\n", cellQuantity );
-
+             makeInstructionStack();
+//            instructionsArray = new double [ cellQuantity + 2] {};
+//                for (int i = cellQuantity + 2; i > 0; i--)
+//                    printf ("%d ", instructionsArray[i]);
+//             printf ( "SO: %d\n", cellQuantity );
+//            
             controlCommandsDoing();
             }
             
@@ -75,7 +77,7 @@ class Processor
         size_t commandsQuantity = 0;
         int currentMemoryCell = 0;
         int cellQuantity = 0;
-        double* instructionsArray = new double [ 1000 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s 100000000
+        double* instructionsArray = NULL;   // MAKE SOMETHING NORMAL HERE, PLEASE;s 100000000
 //        double* instructionsArray = new double [ cellQuantity * 100 ] {};   // MAKE SOMETHING NORMAL HERE, PLEASE;s
         
         
@@ -95,23 +97,28 @@ class Processor
             readFromFile machineCode ( "machineCode.txt" );
             commandsQuantity = machineCode.calculateLinesQuantity();
             
+            
+            cellQuantity = fromStringToNumber ( machineCode.getTillEndOfLine() );
+
+            instructionsArray = new double [ cellQuantity ] {};
 
 //            cellQuantity = fromStringToNumber ( machineCode.getTillEndOfLine() );
 //            printf ( "SO HERE IT IS: %d\n", cellQuantity );
 
             int currentCellTemp = 0;
-            for ( int currentLine = 0; currentLine < commandsQuantity; currentLine++ )
+            for ( int currentLine = 1; currentLine < commandsQuantity; currentLine++ )
                 {
                 currentCellTemp = currentCellTemp + parseLine ( machineCode.getTillEndOfLine(), currentCellTemp );
 //                parseLine ( machineCode.getTillEndOfLine(), currentCellTemp );
                 }
+            
+//            printf ("GOVNO: %d\n", currentCellTemp);
             
 //            for ( int i = 0; i < 64; i++ )
 //                {
 //                std::cout << instructionsArray [ i ] << " ";
 //                }
 //            std::cout << "\n";
-            cellQuantity = currentCellTemp;
             return currentCellTemp;
             }
         
@@ -738,6 +745,7 @@ int main()
 
 int main ( int argc, const char * argv[] ) 
     {
+//    perror("errorMain: ");
     clock_t begin = clock();
     compiler myCompiler ( "humanCode.txt", "machineCode.txt" );
     clock_t medium = clock();

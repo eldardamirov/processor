@@ -75,5 +75,7 @@ __kernel void vectorDiv ( __global const int* first, __global const int* second,
     
     result [ myId ] = first [ myId ] / second [ myId ];
     }
+    
+
 
 

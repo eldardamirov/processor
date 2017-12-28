@@ -221,8 +221,8 @@ class compiler
             
             std::string lineToWrite = "";
 //            std::cout << commandsArray [ 1 ].commandId << " " << commandsArray [ 1 ].operandaModifier << " " << commandsArray [ 1 ].argumentS << " " << commandsArray [ 1 ].argumentS2 << " " << commandsArray [ 1 ].argument << " " << commandsArray [ 1 ].argument2 << "\n";
-//            std::string sumOfMemoryCells = std::to_string ( commandInMemoryLocation ) + "\n";
-//            machineCodeFile.writeString ( sumOfMemoryCells );
+            std::string sumOfMemoryCells = std::to_string ( commandInMemoryLocation ) + "\n";
+            machineCodeFile.writeString ( sumOfMemoryCells );
             for ( int currentLine = 0; currentLine < linesQuantity; currentLine++ ) 
                 {
                 lineToWrite = "";

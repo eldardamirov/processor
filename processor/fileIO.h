@@ -164,7 +164,10 @@ class readFromFile
         void init()
             {
 //            fileDescriptor = open ( "humanCode.txt", O_RDWR , 0 );
-            fileDescriptor = open ( inputFileName, O_RDWR , 0 );
+            
+//            printf ( "%s\n", inputFileName );
+//            perror("error: ");
+            fileDescriptor = open ( inputFileName, O_RDWR, 0 );
             if ( fileDescriptor < 0 )
                 {
                 printf ( "File descriptor error.\n" );
@@ -288,7 +291,11 @@ class writeToFile
 
         void init()
             {
+            
+            
+
             fileDescriptor = open ( outputFileName, O_RDWR | O_CREAT , ( mode_t ) 0600 );
+//            perror("error: ");
             if ( fileDescriptor < 0 )
                 {
                 printf ( "File descriptor error.\n" );
@@ -303,7 +310,8 @@ class writeToFile
 
         int makeFileDescription ( int fileDescriptor, size_t fileSize )
             {
-            int tempFileDescription = lseek ( fileDescriptor, int ( fileSizeMe ), SEEK_SET );
+            int tempFileDescription = lseek ( fileDescriptor, uint64_t ( fileSizeMe ), SEEK_SET );
+            
             if ( tempFileDescription < 0 )
                 {
                 close ( fileDescriptor );
